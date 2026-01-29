@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,291 +10,284 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-```
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #f5f7fa;
-        padding: 20px;
-    }
-    
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        overflow: hidden;
-    }
-    
-    .header {
-        background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
-        color: white;
-        padding: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    
-    .logo-section {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-    
-    .logo-placeholder {
-        width: 80px;
-        height: 80px;
-        background: white;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        color: #0066cc;
-        font-size: 24px;
-    }
-    
-    .company-info h1 {
-        font-size: 28px;
-        margin-bottom: 5px;
-    }
-    
-    .company-info p {
-        font-size: 14px;
-        opacity: 0.9;
-    }
-    
-    .form-info {
-        padding: 20px 30px;
-        background: #f8f9fa;
-        border-bottom: 2px solid #e9ecef;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-    }
-    
-    .info-field {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
-    
-    .info-field label {
-        font-size: 12px;
-        color: #666;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-    
-    .info-field input {
-        padding: 8px 12px;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-    
-    .controls {
-        padding: 20px 30px;
-        background: #fff;
-        border-bottom: 2px solid #e9ecef;
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-    }
-    
-    .btn {
-        padding: 12px 24px;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-    
-    .btn-primary {
-        background: #0066cc;
-        color: white;
-    }
-    
-    .btn-primary:hover {
-        background: #0052a3;
-    }
-    
-    .btn-secondary {
-        background: #6c757d;
-        color: white;
-    }
-    
-    .btn-secondary:hover {
-        background: #5a6268;
-    }
-    
-    .btn-success {
-        background: #28a745;
-        color: white;
-    }
-    
-    .btn-success:hover {
-        background: #218838;
-    }
-    
-    .content {
-        padding: 30px;
-    }
-    
-    .category {
-        margin-bottom: 30px;
-    }
-    
-    .category-header {
-        background: #0066cc;
-        color: white;
-        padding: 12px 15px;
-        font-size: 16px;
-        font-weight: 600;
-        border-radius: 5px 5px 0 0;
-    }
-    
-    .category-header.concentrators {
-        background: #6f42c1;
-    }
-    
-    .items-table {
-        width: 100%;
-        border-collapse: collapse;
-        border: 1px solid #dee2e6;
-        border-top: none;
-    }
-    
-    .items-table th {
-        background: #f8f9fa;
-        padding: 10px;
-        text-align: left;
-        font-size: 12px;
-        font-weight: 600;
-        color: #495057;
-        border-bottom: 2px solid #dee2e6;
-    }
-    
-    .items-table td {
-        padding: 10px;
-        border-bottom: 1px solid #e9ecef;
-        font-size: 13px;
-    }
-    
-    .items-table tr:hover {
-        background: #f8f9fa;
-    }
-    
-    .items-table input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-    }
-    
-    .items-table input[type="number"] {
-        width: 60px;
-        padding: 5px;
-        border: 1px solid #dee2e6;
-        border-radius: 3px;
-        text-align: center;
-    }
-    
-    .below-minimum {
-        background: #fff3cd !important;
-    }
-    
-    .pick-list {
-        display: none;
-    }
-    
-    .pick-list.active {
-        display: block;
-    }
-    
-    .pick-list-header {
-        background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
-        color: white;
-        padding: 20px;
-        text-align: center;
-    }
-    
-    .pick-list-info {
-        padding: 15px;
-        background: #f8f9fa;
-        border-bottom: 2px solid #dee2e6;
-        font-size: 13px;
-    }
-    
-    .pick-list-items {
-        padding: 20px;
-        column-count: 2;
-        column-gap: 30px;
-    }
-    
-    .pick-item {
-        break-inside: avoid;
-        padding: 12px;
-        margin-bottom: 10px;
-        background: white;
-        border: 1px solid #dee2e6;
-        border-left: 4px solid #0066cc;
-        border-radius: 4px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .pick-item-name {
-        font-weight: 600;
-        color: #212529;
-    }
-    
-    .pick-item-qty {
-        background: #0066cc;
-        color: white;
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-    
-    .selected-count {
-        background: #28a745;
-        color: white;
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 13px;
-        font-weight: 600;
-    }
-    
-    @media print {
+        
         body {
-            background: white;
-            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
         }
         
         .container {
-            box-shadow: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
         
-        .controls, .content, .no-print {
-            display: none !important;
+        .header {
+            background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logo-placeholder {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #0066cc;
+            font-size: 24px;
+        }
+        
+        .company-info h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .company-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .form-info {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .info-field label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .info-field input {
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .controls {
+            padding: 20px 30px;
+            background: #fff;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #0066cc;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0052a3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .category {
+            margin-bottom: 30px;
+        }
+        
+        .category-header {
+            background: #0066cc;
+            color: white;
+            padding: 12px 15px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #dee2e6;
+            border-top: none;
+        }
+        
+        .items-table th {
+            background: #f8f9fa;
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .items-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 13px;
+        }
+        
+        .items-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .items-table input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .items-table input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #dee2e6;
+            border-radius: 3px;
+            text-align: center;
+        }
+        
+        .below-minimum {
+            background: #fff3cd !important;
         }
         
         .pick-list {
-            display: block !important;
+            display: none;
+        }
+        
+        .pick-list.active {
+            display: block;
+        }
+        
+        .pick-list-header {
+            background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .pick-list-info {
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 13px;
         }
         
         .pick-list-items {
-            column-count: 3;
+            padding: 20px;
+            column-count: 2;
+            column-gap: 30px;
         }
-    }
-</style>
-```
-
+        
+        .pick-item {
+            break-inside: avoid;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-left: 4px solid #0066cc;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pick-item-name {
+            font-weight: 600;
+            color: #212529;
+        }
+        
+        .pick-item-qty {
+            background: #0066cc;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .selected-count {
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .controls, .content, .no-print {
+                display: none !important;
+            }
+            
+            .pick-list {
+                display: block !important;
+            }
+            
+            .pick-list-items {
+                column-count: 3;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -310,553 +302,518 @@
                     </div>
                 </div>
             </div>
-
-```
-        <div class="form-info">
-            <div class="info-field">
-                <label>Driver/Route</label>
-                <input type="text" id="driver" placeholder="Enter name">
-            </div>
-            <div class="info-field">
-                <label>Truck #</label>
-                <input type="text" id="truck" placeholder="Enter truck number">
-            </div>
-            <div class="info-field">
-                <label>Date</label>
-                <input type="date" id="date">
-            </div>
-        </div>
-        
-        <div class="controls no-print">
-            <button class="btn btn-primary" onclick="generatePickList()">
-                📋 Generate Pick List (<span id="selectedCount">0</span> items)
-            </button>
-            <button class="btn btn-secondary" onclick="checkBelowMinimum()">
-                ⚠️ Auto-Select Below Minimum
-            </button>
-            <button class="btn btn-secondary" onclick="clearAll()">
-                ✖️ Clear All
-            </button>
-        </div>
-        
-        <div class="content">
-            <!-- Nasal Cannulas -->
-            <div class="category">
-                <div class="category-header">NASAL CANNULAS</div>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">Pick</th>
-                            <th>Item Description</th>
-                            <th style="width: 80px;">Minimum</th>
-                            <th style="width: 80px;">Current</th>
-                            <th style="width: 80px;">Need</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-item="7FT Cannula" data-min="25">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>7FT Cannula</td>
-                            <td>25</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="4FT Cannula" data-min="20">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>4FT Cannula</td>
-                            <td>20</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Pediatric Cannula" data-min="10">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Pediatric Cannula</td>
-                            <td>10</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="14FT Cannula" data-min="15">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>14FT Cannula</td>
-                            <td>15</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="4807 Dual Cannula" data-min="8">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>4807 Dual Cannula</td>
-                            <td>8</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="4804 Dual Cannula" data-min="8">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>4804 Dual Cannula</td>
-                            <td>8</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="1056 Soft Cannula" data-min="12">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>1056 Soft Cannula</td>
-                            <td>12</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Oxygen Tubing -->
-            <div class="category">
-                <div class="category-header">OXYGEN TUBING</div>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">Pick</th>
-                            <th>Item Description</th>
-                            <th style="width: 80px;">Minimum</th>
-                            <th style="width: 80px;">Current</th>
-                            <th style="width: 80px;">Need</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-item="7FT Tubing" data-min="20">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>7FT Tubing</td>
-                            <td>20</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="25FT Tubing" data-min="30">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>25FT Tubing</td>
-                            <td>30</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="50FT Tubing" data-min="25">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>50FT Tubing</td>
-                            <td>25</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Accessories -->
-            <div class="category">
-                <div class="category-header">ACCESSORIES & CONNECTORS</div>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">Pick</th>
-                            <th>Item Description</th>
-                            <th style="width: 80px;">Minimum</th>
-                            <th style="width: 80px;">Current</th>
-                            <th style="width: 80px;">Need</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-item="1016 EZ Wrap" data-min="15">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>1016 EZ Wrap</td>
-                            <td>15</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="1205 Nipple" data-min="20">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>1205 Nipple</td>
-                            <td>20</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Christmas Tree Connectors" data-min="25">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Christmas Tree Connectors</td>
-                            <td>25</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Oxygen Connectors" data-min="20">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Oxygen Connectors</td>
-                            <td>20</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Water Trap" data-min="10">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Water Trap</td>
-                            <td>10</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Humidifiers -->
-            <div class="category">
-                <div class="category-header">HUMIDIFIERS</div>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">Pick</th>
-                            <th>Item Description</th>
-                            <th style="width: 80px;">Minimum</th>
-                            <th style="width: 80px;">Current</th>
-                            <th style="width: 80px;">Need</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-item="Bubble Humidifier (Standard)" data-min="12">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Bubble Humidifier (Standard)</td>
-                            <td>12</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Bubble Humidifier (High Flow)" data-min="8">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Bubble Humidifier (High Flow)</td>
-                            <td>8</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Pre-filled Humidifier" data-min="15">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Pre-filled Humidifier</td>
-                            <td>15</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Oxygen Concentrators -->
-            <div class="category">
-                <div class="category-header concentrators">OXYGEN CONCENTRATORS</div>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">Pick</th>
-                            <th>Item Description</th>
-                            <th style="width: 80px;">Minimum</th>
-                            <th style="width: 80px;">Current</th>
-                            <th style="width: 80px;">Need</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-item="5LPM VAGLA" data-min="1">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>5LPM VAGLA</td>
-                            <td>1</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="5LPM VALB" data-min="1">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>5LPM VALB</td>
-                            <td>1</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="5LPM CALOX" data-min="1">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>5LPM CALOX</td>
-                            <td>1</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Cylinder Equipment -->
-            <div class="category">
-                <div class="category-header">CYLINDER EQUIPMENT</div>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">Pick</th>
-                            <th>Item Description</th>
-                            <th style="width: 80px;">Minimum</th>
-                            <th style="width: 80px;">Current</th>
-                            <th style="width: 80px;">Need</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-item="E-Cart Single" data-min="4">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>E-Cart Single</td>
-                            <td>4</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="E-Cart Dual" data-min="2">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>E-Cart Dual</td>
-                            <td>2</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="M6 Rack" data-min="3">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>M6 Rack</td>
-                            <td>3</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="E Keys" data-min="6">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>E Keys</td>
-                            <td>6</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Washers" data-min="50">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Washers</td>
-                            <td>50</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Regulators -->
-            <div class="category">
-                <div class="category-header">REGULATORS</div>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">Pick</th>
-                            <th>Item Description</th>
-                            <th style="width: 80px;">Minimum</th>
-                            <th style="width: 80px;">Current</th>
-                            <th style="width: 80px;">Need</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-item="E-Reg 0-8 LPM" data-min="6">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>E-Reg 0-8 LPM</td>
-                            <td>6</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="E-Reg 1-15 LPM" data-min="4">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>E-Reg 1-15 LPM</td>
-                            <td>4</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="E-Reg Low Flow" data-min="3">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>E-Reg Low Flow</td>
-                            <td>3</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="H-Reg 0-8 LPM" data-min="4">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>H-Reg 0-8 LPM</td>
-                            <td>4</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="H-Reg 0-15 LPM" data-min="3">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>H-Reg 0-15 LPM</td>
-                            <td>3</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="H-Reg Low Flow" data-min="2">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>H-Reg Low Flow</td>
-                            <td>2</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- PPE -->
-            <div class="category">
-                <div class="category-header">INFECTION CONTROL & PPE</div>
-                <table class="items-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">Pick</th>
-                            <th>Item Description</th>
-                            <th style="width: 80px;">Minimum</th>
-                            <th style="width: 80px;">Current</th>
-                            <th style="width: 80px;">Need</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-item="Madacide (bottles)" data-min="3">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Madacide (bottles)</td>
-                            <td>3</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Latex Gloves (boxes)" data-min="2">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Latex Gloves (boxes)</td>
-                            <td>2</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="N95 Masks (boxes)" data-min="1">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>N95 Masks (boxes)</td>
-                            <td>1</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Gowns" data-min="10">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Gowns</td>
-                            <td>10</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                        <tr data-item="Hand Sanitizer (bottles)" data-min="3">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                            <td>Hand Sanitizer (bottles)</td>
-                            <td>3</td>
-                            <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                            <td class="need-qty">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pick List View -->
-    <div class="pick-list" id="pickList">
-        <div class="pick-list-header">
-            <div class="logo-placeholder" style="margin: 0 auto 15px;">LOGO</div>
-            <h1>CalOx Health Services</h1>
-            <h2 style="font-size: 18px; margin-top: 5px;">Supply Pick List</h2>
-        </div>
-        
-        <div class="pick-list-info">
-            <strong>Driver/Route:</strong> <span id="printDriver"></span> &nbsp;&nbsp;|&nbsp;&nbsp;
-            <strong>Truck #:</strong> <span id="printTruck"></span> &nbsp;&nbsp;|&nbsp;&nbsp;
-            <strong>Date:</strong> <span id="printDate"></span>
-        </div>
-        
-        <div class="pick-list-items" id="pickListItems"></div>
-    </div>
-</div>
-
-<script>
-    // Set today's date
-    document.getElementById('date').valueAsDate = new Date();
-    
-    function checkMinimum(input) {
-        const row = input.closest('tr');
-        const min = parseInt(row.dataset.min);
-        const current = parseInt(input.value) || 0;
-        const need = Math.max(0, min - current);
-        
-        const needCell = row.querySelector('.need-qty');
-        needCell.textContent = need > 0 ? need : '-';
-        
-        if (need > 0) {
-            row.classList.add('below-minimum');
-        } else {
-            row.classList.remove('below-minimum');
-        }
-    }
-    
-    function updateCount() {
-        const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
-        document.getElementById('selectedCount').textContent = checked;
-    }
-    
-    function checkBelowMinimum() {
-        const rows = document.querySelectorAll('.items-table tbody tr');
-        rows.forEach(row => {
-            const currentInput = row.querySelector('input[type="number"]');
-            const checkbox = row.querySelector('input[type="checkbox"]');
-            const min = parseInt(row.dataset.min);
-            const current = parseInt(currentInput.value) || 0;
             
-            if (current < min) {
-                checkbox.checked = true;
-            } else {
-                checkbox.checked = false;
-            }
-        });
-        updateCount();
-    }
-    
-    function clearAll() {
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-        updateCount();
-    }
-    
-    function generatePickList() {
-        const driver = document.getElementById('driver').value || 'Not specified';
-        const truck = document.getElementById('truck').value || 'Not specified';
-        const date = document.getElementById('date').value || 'Not specified';
+            <div class="form-info">
+                <div class="info-field">
+                    <label>Driver/Route</label>
+                    <input type="text" id="driver" placeholder="Enter name">
+                </div>
+                <div class="info-field">
+                    <label>Truck #</label>
+                    <input type="text" id="truck" placeholder="Enter truck number">
+                </div>
+                <div class="info-field">
+                    <label>Date</label>
+                    <input type="date" id="date">
+                </div>
+            </div>
+            
+            <div class="controls no-print">
+                <button class="btn btn-primary" onclick="generatePickList()">
+                    📋 Generate Pick List (<span id="selectedCount">0</span> items)
+                </button>
+                <button class="btn btn-secondary" onclick="checkBelowMinimum()">
+                    ⚠️ Auto-Select Below Minimum
+                </button>
+                <button class="btn btn-secondary" onclick="clearAll()">
+                    ✖️ Clear All
+                </button>
+            </div>
+            
+            <div class="content">
+                <!-- Nasal Cannulas -->
+                <div class="category">
+                    <div class="category-header">NASAL CANNULAS</div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Pick</th>
+                                <th>Item Description</th>
+                                <th style="width: 80px;">Minimum</th>
+                                <th style="width: 80px;">Current</th>
+                                <th style="width: 80px;">Need</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-item="7FT Cannula" data-min="25">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>7FT Cannula</td>
+                                <td>25</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="4FT Cannula" data-min="20">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>4FT Cannula</td>
+                                <td>20</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Pediatric Cannula" data-min="10">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Pediatric Cannula</td>
+                                <td>10</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="14FT Cannula" data-min="15">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>14FT Cannula</td>
+                                <td>15</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="4807 Dual Cannula" data-min="8">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>4807 Dual Cannula</td>
+                                <td>8</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="4804 Dual Cannula" data-min="8">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>4804 Dual Cannula</td>
+                                <td>8</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="1056 Soft Cannula" data-min="12">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>1056 Soft Cannula</td>
+                                <td>12</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Hi-Flo Cannula" data-min="8">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Hi-Flo Cannula</td>
+                                <td>8</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Oxygen Tubing -->
+                <div class="category">
+                    <div class="category-header">OXYGEN TUBING</div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Pick</th>
+                                <th>Item Description</th>
+                                <th style="width: 80px;">Minimum</th>
+                                <th style="width: 80px;">Current</th>
+                                <th style="width: 80px;">Need</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-item="7FT Tubing" data-min="20">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>7FT Tubing</td>
+                                <td>20</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="25FT Tubing" data-min="30">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>25FT Tubing</td>
+                                <td>30</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="50FT Tubing" data-min="25">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>50FT Tubing</td>
+                                <td>25</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Accessories -->
+                <div class="category">
+                    <div class="category-header">ACCESSORIES & CONNECTORS</div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Pick</th>
+                                <th>Item Description</th>
+                                <th style="width: 80px;">Minimum</th>
+                                <th style="width: 80px;">Current</th>
+                                <th style="width: 80px;">Need</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-item="1016 EZ Wrap" data-min="15">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>1016 EZ Wrap</td>
+                                <td>15</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="1205 Nipple" data-min="20">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>1205 Nipple</td>
+                                <td>20</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Christmas Tree Connectors" data-min="25">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Christmas Tree Connectors</td>
+                                <td>25</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Oxygen Connectors" data-min="20">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Oxygen Connectors</td>
+                                <td>20</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Water Trap" data-min="10">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Water Trap</td>
+                                <td>10</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Humidifiers -->
+                <div class="category">
+                    <div class="category-header">HUMIDIFIERS</div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Pick</th>
+                                <th>Item Description</th>
+                                <th style="width: 80px;">Minimum</th>
+                                <th style="width: 80px;">Current</th>
+                                <th style="width: 80px;">Need</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-item="Bubble Humidifier (Standard)" data-min="12">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Bubble Humidifier (Standard)</td>
+                                <td>12</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Bubble Humidifier (High Flow)" data-min="8">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Bubble Humidifier (High Flow)</td>
+                                <td>8</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Pre-filled Humidifier" data-min="15">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Pre-filled Humidifier</td>
+                                <td>15</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Cylinder Equipment -->
+                <div class="category">
+                    <div class="category-header">CYLINDER EQUIPMENT</div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Pick</th>
+                                <th>Item Description</th>
+                                <th style="width: 80px;">Minimum</th>
+                                <th style="width: 80px;">Current</th>
+                                <th style="width: 80px;">Need</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-item="E-Cart Single" data-min="4">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>E-Cart Single</td>
+                                <td>4</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="E-Cart Dual" data-min="2">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>E-Cart Dual</td>
+                                <td>2</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="M6 Rack" data-min="3">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>M6 Rack</td>
+                                <td>3</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="E Keys" data-min="6">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>E Keys</td>
+                                <td>6</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Washers" data-min="50">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Washers</td>
+                                <td>50</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Regulators -->
+                <div class="category">
+                    <div class="category-header">REGULATORS</div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Pick</th>
+                                <th>Item Description</th>
+                                <th style="width: 80px;">Minimum</th>
+                                <th style="width: 80px;">Current</th>
+                                <th style="width: 80px;">Need</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-item="E-Reg 0-8 LPM" data-min="6">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>E-Reg 0-8 LPM</td>
+                                <td>6</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="E-Reg 1-15 LPM" data-min="4">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>E-Reg 1-15 LPM</td>
+                                <td>4</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="E-Reg Low Flow" data-min="3">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>E-Reg Low Flow</td>
+                                <td>3</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="H-Reg 0-8 LPM" data-min="4">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>H-Reg 0-8 LPM</td>
+                                <td>4</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="H-Reg 0-15 LPM" data-min="3">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>H-Reg 0-15 LPM</td>
+                                <td>3</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="H-Reg Low Flow" data-min="2">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>H-Reg Low Flow</td>
+                                <td>2</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PPE -->
+                <div class="category">
+                    <div class="category-header">INFECTION CONTROL & PPE</div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Pick</th>
+                                <th>Item Description</th>
+                                <th style="width: 80px;">Minimum</th>
+                                <th style="width: 80px;">Current</th>
+                                <th style="width: 80px;">Need</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-item="Madacide (bottles)" data-min="3">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Madacide (bottles)</td>
+                                <td>3</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Latex Gloves (boxes)" data-min="2">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Latex Gloves (boxes)</td>
+                                <td>2</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="N95 Masks (boxes)" data-min="1">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>N95 Masks (boxes)</td>
+                                <td>1</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Gowns" data-min="10">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Gowns</td>
+                                <td>10</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="Hand Sanitizer (bottles)" data-min="3">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>Hand Sanitizer (bottles)</td>
+                                <td>3</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pick List View -->
+        <div class="pick-list" id="pickList">
+            <div class="pick-list-header">
+                <div class="logo-placeholder" style="margin: 0 auto 15px;">LOGO</div>
+                <h1>CalOx Health Services</h1>
+                <h2 style="font-size: 18px; margin-top: 5px;">Supply Pick List</h2>
+            </div>
+            
+            <div class="pick-list-info">
+                <strong>Driver/Route:</strong> <span id="printDriver"></span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                <strong>Truck #:</strong> <span id="printTruck"></span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                <strong>Date:</strong> <span id="printDate"></span>
+            </div>
+            
+            <div class="pick-list-items" id="pickListItems"></div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date
+        document.getElementById('date').valueAsDate = new Date();
         
-        document.getElementById('printDriver').textContent = driver;
-        document.getElementById('printTruck').textContent = truck;
-        document.getElementById('printDate').textContent = date;
-        
-        const pickListItems = document.getElementById('pickListItems');
-        pickListItems.innerHTML = '';
-        
-        const checkedRows = document.querySelectorAll('input[type="checkbox"]:checked');
-        
-        if (checkedRows.length === 0) {
-            alert('Please select at least one item to generate a pick list.');
-            return;
-        }
-        
-        checkedRows.forEach(checkbox => {
-            const row = checkbox.closest('tr');
-            const item = row.dataset.item;
-            const min = row.dataset.min;
-            const current = row.querySelector('input[type="number"]').value || 0;
+        function checkMinimum(input) {
+            const row = input.closest('tr');
+            const min = parseInt(row.dataset.min);
+            const current = parseInt(input.value) || 0;
             const need = Math.max(0, min - current);
             
-            const pickItem = document.createElement('div');
-            pickItem.className = 'pick-item';
-            pickItem.innerHTML = `
-                <span class="pick-item-name">${item}</span>
-                <span class="pick-item-qty">QTY: ${need}</span>
-            `;
-            pickListItems.appendChild(pickItem);
-        });
+            const needCell = row.querySelector('.need-qty');
+            needCell.textContent = need > 0 ? need : '-';
+            
+            if (need > 0) {
+                row.classList.add('below-minimum');
+            } else {
+                row.classList.remove('below-minimum');
+            }
+        }
         
-        document.getElementById('mainView').style.display = 'none';
-        document.getElementById('pickList').classList.add('active');
+        function updateCount() {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            document.getElementById('selectedCount').textContent = checked;
+        }
         
-        setTimeout(() => window.print(), 100);
+        function checkBelowMinimum() {
+            const rows = document.querySelectorAll('.items-table tbody tr');
+            rows.forEach(row => {
+                const currentInput = row.querySelector('input[type="number"]');
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                const min = parseInt(row.dataset.min);
+                const current = parseInt(currentInput.value) || 0;
+                
+                if (current < min) {
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false;
+                }
+            });
+            updateCount();
+        }
         
-        setTimeout(() => {
-            document.getElementById('mainView').style.display = 'block';
-            document.getElementById('pickList').classList.remove('active');
-        }, 500);
-    }
-</script>
-```
-
+        function clearAll() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            updateCount();
+        }
+        
+        function generatePickList() {
+            const driver = document.getElementById('driver').value || 'Not specified';
+            const truck = document.getElementById('truck').value || 'Not specified';
+            const date = document.getElementById('date').value || 'Not specified';
+            
+            document.getElementById('printDriver').textContent = driver;
+            document.getElementById('printTruck').textContent = truck;
+            document.getElementById('printDate').textContent = date;
+            
+            const pickListItems = document.getElementById('pickListItems');
+            pickListItems.innerHTML = '';
+            
+            const checkedRows = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            if (checkedRows.length === 0) {
+                alert('Please select at least one item to generate a pick list.');
+                return;
+            }
+            
+            checkedRows.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                const item = row.dataset.item;
+                const min = row.dataset.min;
+                const current = row.querySelector('input[type="number"]').value || 0;
+                const need = Math.max(0, min - current);
+                
+                const pickItem = document.createElement('div');
+                pickItem.className = 'pick-item';
+                pickItem.innerHTML = `
+                    <span class="pick-item-name">${item}</span>
+                    <span class="pick-item-qty">QTY: ${need}</span>
+                `;
+                pickListItems.appendChild(pickItem);
+            });
+            
+            document.getElementById('mainView').style.display = 'none';
+            document.getElementById('pickList').classList.add('active');
+            
+            setTimeout(() => window.print(), 100);
+            
+            setTimeout(() => {
+                document.getElementById('mainView').style.display = 'block';
+                document.getElementById('pickList').classList.remove('active');
+            }, 500);
+        }
+    </script>
 </body>
 </html>
