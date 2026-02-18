@@ -401,6 +401,13 @@
                                 <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
                                 <td class="need-qty">-</td>
                             </tr>
+                            <tr data-item="VA Cannula" data-min="20">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>VA Cannula</td>
+                                <td>20</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -504,47 +511,45 @@
                     </table>
                 </div>
 
-
                 <!-- Concentrators -->
                 <div class="category">
                     <div class="category-header">CONCENTRATORS</div>
                     <table class="items-table">
                         <thead>
                             <tr>
-                                <th>Pick</th>
-                        <th>Item Description</th>
-                        <th>Minimum</th>
-                        <th>Current</th>
-                        <th>Need</th>
+                                <th style="width: 50px;">Pick</th>
+                                <th>Item Description</th>
+                                <th style="width: 80px;">Minimum</th>
+                                <th style="width: 80px;">Current</th>
+                                <th style="width: 80px;">Need</th>
                             </tr>
                         </thead>
-                    <tbody>
-                        <tr data-item="Calox Concentrator" data-min="1">
-                            <td><input type="checkbox" onchange="updateCount()"></td>
-                    <td>Calox Concentrator</td>
-                    <td>1</td>
-                    <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                    <td class="need-qty">–</td>
-                        </tr>tr><tr data-item="VALB Concentrator" data-min="1">
-                    <td><input type="checkbox" onchange="updateCount()"></td>
-                    <td>VALB Concentrator</td>
-                    <td>1</td>
-                    <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                    <td class="need-qty">–</td>
-                        </tr>tr><tr data-item="VAGLA Concentrator" data-min="1">
-                    <td><input type="checkbox" onchange="updateCount()"></td>
-                    <td>VAGLA Concentrator</td>
-                    <td>1</td>
-                    <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                    <td class="need-qty">–</td>
-                        </tr>tr></td></td>
-                    
-                    </tbody>
-                    </table>table>
-                </div>div></td></td>
-                    </tbody></th></th>
+                        <tbody>
+                            <tr data-item="VALB 5Lpm Conc" data-min="1">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>VALB 5Lpm Conc</td>
+                                <td>1</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
                             </tr>
-                        </thead>
+                            <tr data-item="VAGLA 5Lpm Conc" data-min="1">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>VAGLA 5Lpm Conc</td>
+                                <td>1</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                            <tr data-item="CalOx 5Lpm Conc" data-min="1">
+                                <td><input type="checkbox" onchange="updateCount()"></td>
+                                <td>CalOx 5Lpm Conc</td>
+                                <td>1</td>
+                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
+                                <td class="need-qty">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <!-- Humidifiers -->
                 <div class="category">
                     <div class="category-header">HUMIDIFIERS</div>
