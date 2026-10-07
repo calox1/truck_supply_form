@@ -1,1209 +1,785 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CalOx Supply Pick List Generator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-      /* ═══════════════════════════════════════════════
-         CalOx Design System Tokens (DESIGN.md)
-         ═══════════════════════════════════════════════ */
-      :root {
-        --clx-blue-50:  #eaf4fb;
-        --clx-blue-100: #cfe6f5;
-        --clx-blue-200: #9fcdeb;
-        --clx-blue-500: #1e9fd9;
-        --clx-blue-600: #1585b8;
-        --clx-blue-700: #0f6a94;
-        --clx-blue-900: #062f43;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CalOx truck supply pick list</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+/* ==========================================================================
+   CalOx Design System tokens (from tokens.json)
+   ========================================================================== */
+:root {
+  --clx-blue-50: #eaf4fb;  --clx-blue-100: #cfe6f5; --clx-blue-200: #9fcdeb;
+  --clx-blue-500: #1e9fd9; --clx-blue-600: #1585b8; --clx-blue-700: #0f6a94;
+  --clx-blue-900: #062f43;
+  --clx-gray-50: #f7f8f9;  --clx-gray-100: #eef0f2; --clx-gray-200: #dfe2e6;
+  --clx-gray-300: #c4c9ce; --clx-gray-400: #9aa1a8; --clx-gray-500: #7a828a;
+  --clx-gray-600: #5d656c; --clx-gray-700: #434a51; --clx-gray-900: #161a1e;
+  --clx-green-500: #2f9e6a; --clx-amber-500: #d89521; --clx-red-500: #c93a3a;
 
-        --clx-gray-50:  #f7f8f9;
-        --clx-gray-100: #eef0f2;
-        --clx-gray-200: #dfe2e6;
-        --clx-gray-300: #c4c9ce;
-        --clx-gray-400: #9aa1a8;
-        --clx-gray-500: #7a828a;
-        --clx-gray-600: #5d656c;
-        --clx-gray-700: #434a51;
-        --clx-gray-900: #161a1e;
+  --surface-page: #ffffff; --surface-muted: var(--clx-gray-50); --surface-raised: #ffffff;
+  --fg-1: var(--clx-gray-900); --fg-2: var(--clx-gray-700); --fg-3: var(--clx-gray-500);
+  --fg-4: var(--clx-gray-400); --fg-link: var(--clx-blue-600);
+  --border-1: var(--clx-gray-200); --border-2: var(--clx-gray-300);
 
-        --clx-green-500: #2f9e6a;
-        --clx-amber-500: #d89521;
-        --clx-red-500:   #c93a3a;
-        --clx-amber-bg:  #fcf1de;
-        --clx-amber-fg:  #8a5e11;
+  /* Status tones (Badge component) */
+  --pending-bg: #fcf1de; --pending-fg: #8a5e11;
+  --urgent-bg: #fbeaea;  --delivered-bg: #e6f4ed; --delivered-fg: #1f7a4e;
 
-        --surface-page:   #ffffff;
-        --surface-muted:  var(--clx-gray-50);
-        --surface-raised: #ffffff;
-        --surface-inverse: var(--clx-blue-900);
+  --font-sans: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --fs-h1: 34px; --fs-h2: 26px; --fs-h3: 20px; --fs-h4: 17px;
+  --fs-body: 16px; --fs-sm: 14px; --fs-xs: 12px; --fs-micro: 11px;
+  --lh-tight: 1.15; --lh-snug: 1.3; --lh-normal: 1.5;
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700;
+  --ls-eyebrow: 0.12em; --ls-label: 0.04em;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --radius-sm: 3px; --radius-md: 6px; --radius-lg: 10px; --radius-pill: 999px;
+  --shadow-1: 0 1px 2px rgba(16,30,50,0.06), 0 1px 1px rgba(16,30,50,0.04);
+  --ease-standard: cubic-bezier(0.2, 0.0, 0.2, 1);
+  --dur-fast: 120ms; --dur-base: 200ms;
+  --focus-ring: 0 0 0 3px rgba(30,159,217,0.18);
+}
 
-        --fg-1: var(--clx-gray-900);
-        --fg-2: var(--clx-gray-700);
-        --fg-3: var(--clx-gray-500);
-        --fg-4: var(--clx-gray-400);
-        --fg-on-blue: #ffffff;
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; font-family: var(--font-sans); font-size: var(--fs-body);
+  line-height: var(--lh-normal); color: var(--fg-2); background: var(--surface-page);
+}
+[hidden] { display: none !important; }
+h1, h2, h3, p { margin: 0; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 var(--space-6); }
 
-        --border-1: var(--clx-gray-200);
-        --border-2: var(--clx-gray-300);
-        --border-brand: var(--clx-blue-500);
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.site-header { border-bottom: 1px solid var(--border-1); background: var(--surface-raised); }
+.site-header .wrap { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.brand { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+.brand svg { width: 40px; height: 31px; flex: none; }
+.brand-name { font-size: var(--fs-h4); font-weight: var(--fw-semibold); color: var(--fg-1); line-height: var(--lh-tight); }
+.brand-sub { font-size: var(--fs-xs); color: var(--fg-3); }
+.account { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+.account-name { font-size: var(--fs-sm); color: var(--fg-2); text-align: right; line-height: var(--lh-snug); min-width: 0; }
+.account-name strong { display: block; color: var(--fg-1); font-weight: var(--fw-semibold); }
+.account-name span { display: block; font-size: var(--fs-xs); color: var(--fg-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
 
-        --font-sans: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif;
-        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+/* ── Type helpers ───────────────────────────────────────────────────────── */
+.clx-eyebrow { display: inline-block; font-size: var(--fs-xs); font-weight: var(--fw-semibold); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--clx-blue-600); }
+.clx-rule-brand { height: 3px; width: 48px; background: var(--clx-blue-500); border: 0; margin: var(--space-3) 0 var(--space-4); }
+.clx-meta { font-size: var(--fs-sm); color: var(--fg-3); }
+.page-title { font-size: var(--fs-h1); font-weight: var(--fw-semibold); line-height: var(--lh-tight); color: var(--fg-1); letter-spacing: -0.01em; margin-top: var(--space-1); text-wrap: balance; }
+.page-head { padding: var(--space-8) 0 var(--space-6); }
+.page-head p { max-width: 640px; }
 
-        --fs-h1:    34px;
-        --fs-h2:    26px;
-        --fs-h3:    20px;
-        --fs-h4:    17px;
-        --fs-body:  16px;
-        --fs-sm:    14px;
-        --fs-xs:    12px;
-        --fs-micro: 11px;
+/* ── Buttons (Button component) ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: var(--fw-semibold); line-height: 1.2;
+  padding: 9px 16px; min-height: 38px; border-radius: var(--radius-md); border: 1px solid transparent;
+  cursor: pointer; white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+}
+.btn:focus-visible { outline: none; box-shadow: var(--focus-ring); border-color: var(--clx-blue-500); }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.btn-primary { background: var(--clx-blue-500); color: #fff; }
+.btn-primary:hover { background: var(--clx-blue-600); }
+.btn-secondary { background: #fff; color: var(--clx-blue-700); border-color: var(--clx-blue-200); }
+.btn-secondary:hover { border-color: var(--clx-blue-500); }
+.btn-ghost { background: transparent; color: var(--fg-2); }
+.btn-ghost:hover { background: var(--clx-gray-100); color: var(--fg-1); }
+.btn-danger { background: #fff; color: var(--clx-red-500); border-color: #f1c6c6; }
+.btn-danger:hover { background: var(--clx-red-500); color: #fff; border-color: var(--clx-red-500); }
+.btn-sm { font-size: 13px; padding: 6px 12px; min-height: 32px; }
+.btn-icon { padding: 6px; min-height: 32px; width: 32px; }
+.count-pill { font-family: var(--font-mono); font-size: var(--fs-xs); background: rgba(255,255,255,0.22); border-radius: var(--radius-pill); padding: 1px 7px; }
 
-        --lh-tight:  1.15;
-        --lh-snug:   1.3;
-        --lh-normal: 1.5;
+/* ── Inputs ─────────────────────────────────────────────────────────────── */
+.field label { display: block; font-size: var(--fs-xs); font-weight: var(--fw-semibold); color: var(--fg-1); margin-bottom: var(--space-1); letter-spacing: 0.02em; }
+.input {
+  width: 100%; font-family: var(--font-sans); font-size: 16px; color: var(--fg-1);
+  padding: 8px 12px; min-height: 40px; border-radius: var(--radius-sm); border: 1px solid var(--border-2); background: #fff;
+  transition: border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+.input::placeholder { color: var(--fg-4); }
+.input:focus { outline: none; border-color: var(--clx-blue-500); box-shadow: var(--focus-ring); }
+.input.is-error { border-color: var(--clx-red-500); }
+.input-num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: center; width: 72px; padding-left: 4px; padding-right: 4px; -moz-appearance: textfield; appearance: textfield; }
+.input-num::-webkit-outer-spin-button, .input-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="checkbox"] { width: 20px; height: 20px; margin: 0; accent-color: var(--clx-blue-600); cursor: pointer; }
 
-        --fw-regular:  400;
-        --fw-medium:   500;
-        --fw-semibold: 600;
-        --fw-bold:     700;
+/* ── Trip details ───────────────────────────────────────────────────────── */
+.trip { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: var(--space-4) var(--space-5); padding: var(--space-5); border: 1px solid var(--border-1); border-radius: var(--radius-md); background: var(--surface-muted); }
 
-        --ls-eyebrow: 0.12em;
-        --ls-label:   0.04em;
+/* ── Toolbar ────────────────────────────────────────────────────────────── */
+.toolbar { position: sticky; top: 0; z-index: 5; background: var(--surface-page); border-bottom: 1px solid var(--border-1); margin-top: var(--space-6); }
+.toolbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-3); padding-bottom: var(--space-3); flex-wrap: wrap; }
+.tally { display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center; }
+.toolbar-actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs); font-weight: var(--fw-semibold); padding: 3px 8px; border-radius: var(--radius-pill); white-space: nowrap; }
+.status::before { content: ''; width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+.status-selected { background: var(--clx-blue-50); color: var(--clx-blue-700); }
+.status-pending { background: var(--pending-bg); color: var(--pending-fg); }
+.status-handled { background: var(--clx-gray-100); color: var(--fg-3); }
 
-        --space-1:  4px;
-        --space-2:  8px;
-        --space-3:  12px;
-        --space-4:  16px;
-        --space-5:  20px;
-        --space-6:  24px;
-        --space-8:  32px;
-        --space-10: 40px;
-        --space-12: 48px;
+.notice { margin-top: var(--space-4); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font-size: var(--fs-sm); border: 1px solid var(--border-1); background: var(--surface-muted); color: var(--fg-1); }
+.notice.is-error { background: var(--urgent-bg); border-color: #f1c6c6; color: #8f2424; }
+.notice.is-ok { background: var(--delivered-bg); border-color: #c5e3d3; color: var(--delivered-fg); }
+.notice .btn { margin-left: var(--space-2); }
 
-        --radius-sm:   3px;
-        --radius-md:   6px;
-        --radius-pill: 999px;
+/* ── Category tables ────────────────────────────────────────────────────── */
+.category { margin-top: var(--space-8); }
+.category-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-2); }
+.category-head h2 { font-size: var(--fs-h3); font-weight: var(--fw-semibold); color: var(--fg-1); line-height: var(--lh-snug); }
+.table-card { border: 1px solid var(--border-1); border-radius: var(--radius-md); overflow: hidden; background: var(--surface-raised); }
+table.items { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+.items th { background: var(--surface-muted); text-align: left; font-size: var(--fs-micro); font-weight: var(--fw-semibold); color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.08em; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--border-1); white-space: nowrap; }
+.items td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--border-1); vertical-align: middle; }
+.items tr:last-child td { border-bottom: 0; }
+.items .c-pick { width: 48px; text-align: center; }
+.items .c-num { width: 96px; text-align: center; }
+.items .c-min { width: 80px; text-align: center; color: var(--fg-3); }
+.items td.c-item { color: var(--fg-1); font-size: 15px; }
+.items td.c-item label { cursor: pointer; display: block; }
+.min-inline { display: none; font-size: var(--fs-xs); color: var(--fg-3); }
+.items tr.is-below td { background: var(--pending-bg); }
+.items tr.is-below .min-inline, .items tr.is-below .c-min { color: var(--pending-fg); }
+.items tr.is-picked td.c-item { font-weight: var(--fw-semibold); }
+.items tr.is-invalid .q-qty, .items tr.is-invalid .q-desc.need { border-color: var(--clx-red-500); }
+.misc-actions { padding: var(--space-2) var(--space-3); border-top: 1px solid var(--border-1); background: var(--surface-muted); }
 
-        --shadow-1: 0 1px 2px rgba(16,30,50,0.06), 0 1px 1px rgba(16,30,50,0.04);
-        --shadow-2: 0 2px 6px rgba(16,30,50,0.08), 0 1px 2px rgba(16,30,50,0.04);
+/* ── Sign-in ────────────────────────────────────────────────────────────── */
+.signin { min-height: calc(100vh - 65px); display: flex; align-items: flex-start; justify-content: center; padding: var(--space-12) var(--space-4); background: var(--surface-muted); }
+.signin-card { width: 100%; max-width: 420px; background: var(--surface-raised); border: 1px solid var(--border-1); border-radius: var(--radius-md); box-shadow: var(--shadow-1); padding: var(--space-8); }
+.signin-card h1 { font-size: var(--fs-h2); font-weight: var(--fw-semibold); color: var(--fg-1); line-height: var(--lh-snug); margin-top: var(--space-1); }
+.signin-card p { margin-top: var(--space-2); }
+#gsiButton { margin-top: var(--space-6); min-height: 44px; }
 
-        --ease-standard: cubic-bezier(0.2, 0.0, 0.2, 1);
-        --dur-fast: 120ms;
-        --dur-base: 200ms;
-      }
+/* ── Pick list sheet ────────────────────────────────────────────────────── */
+.sheet-bar { border-bottom: 1px solid var(--border-1); }
+.sheet-bar .wrap { display: flex; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-3); padding-bottom: var(--space-3); flex-wrap: wrap; }
+.sheet { max-width: 816px; margin: var(--space-8) auto; padding: var(--space-10); border: 1px solid var(--border-1); border-radius: var(--radius-md); box-shadow: var(--shadow-1); background: #fff; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--border-1); }
+.sheet-head .brand svg { width: 46px; height: 36px; }
+.sheet-title { font-size: var(--fs-h2); font-weight: var(--fw-semibold); color: var(--fg-1); line-height: var(--lh-snug); }
+.sheet-meta { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: var(--space-3) var(--space-6); margin: var(--space-4) 0 var(--space-2); }
+.sheet-meta dt { font-size: var(--fs-micro); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-3); }
+.sheet-meta dd { margin: 0; color: var(--fg-1); font-weight: var(--fw-medium); overflow-wrap: anywhere; }
+.sheet-meta { padding: 0; }
+.sheet h3 { font-size: var(--fs-xs); font-weight: var(--fw-semibold); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--clx-blue-700); margin: var(--space-5) 0 var(--space-1); break-after: avoid; }
+table.picks { width: 100%; border-collapse: collapse; }
+.picks td { padding: 7px var(--space-2); border-bottom: 1px solid var(--border-1); color: var(--fg-1); }
+.picks tr { break-inside: avoid; }
+.picks .p-box { width: 28px; padding-left: 0; }
+.picks .p-box span { display: block; width: 16px; height: 16px; border: 1.5px solid var(--clx-gray-600); border-radius: 2px; }
+.picks .p-qty { width: 90px; text-align: right; font-weight: var(--fw-medium); white-space: nowrap; }
+.sheet-foot { display: flex; justify-content: space-between; gap: var(--space-6); margin-top: var(--space-8); font-size: var(--fs-sm); color: var(--fg-3); flex-wrap: wrap; }
+.sign-line { display: inline-block; width: 220px; border-bottom: 1px solid var(--clx-gray-600); margin-left: var(--space-2); }
 
-      /* ═══════════════════════════════════════════════
-         Base Reset
-         ═══════════════════════════════════════════════ */
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-      body {
-        font-family: var(--font-sans);
-        font-size: var(--fs-body);
-        font-weight: var(--fw-regular);
-        line-height: var(--lh-normal);
-        color: var(--fg-2);
-        background: var(--surface-muted);
-        padding: var(--space-5);
-      }
+.site-footer { margin-top: var(--space-12); border-top: 1px solid var(--border-1); padding: var(--space-5) 0; font-size: var(--fs-xs); color: var(--fg-3); text-align: center; }
 
-      /* ═══════════════════════════════════════════════
-         Container
-         ═══════════════════════════════════════════════ */
-      .container {
-        max-width: 1100px;
-        margin: 0 auto;
-        background: var(--surface-raised);
-        border: 1px solid var(--border-1);
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-2);
-        overflow: hidden;
-      }
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .wrap { padding: 0 var(--space-4); }
+  .brand-sub, .account-name span { display: none; }
+  .page-title { font-size: var(--fs-h2); }
+  .page-head { padding: var(--space-6) 0 var(--space-4); }
+  .trip { grid-template-columns: 1fr 1fr; padding: var(--space-4); }
+  .trip .field:first-child { grid-column: 1 / -1; }
+  .toolbar { position: static; }
+  .toolbar-actions { width: 100%; }
+  .toolbar-actions .btn { flex: 1 1 auto; }
+  .toolbar-actions .btn-primary { flex-basis: 100%; order: -1; min-height: 44px; }
+  .items .c-min { display: none; }
+  .min-inline { display: block; }
+  .items th, .items td { padding-left: var(--space-2); padding-right: var(--space-2); }
+  .items .c-pick { width: 40px; }
+  .items .c-num { width: 76px; }
+  .input-num { width: 60px; min-height: 44px; }
+  .sheet { margin: var(--space-4); padding: var(--space-5); }
+  .sheet-meta { grid-template-columns: 1fr 1fr; justify-content: start; }
+  .signin { padding-top: var(--space-6); }
+  .signin-card { padding: var(--space-6); }
+}
 
-      /* ═══════════════════════════════════════════════
-         Header — white bar with logo, per DESIGN.md 8.10
-         NO gradient (anti-pattern #1)
-         ═══════════════════════════════════════════════ */
-      .header {
-        height: 72px;
-        background: var(--surface-raised);
-        border-bottom: 1px solid var(--border-1);
-        display: flex;
-        align-items: center;
-        padding: 0 var(--space-8);
-      }
-      .logo-section {
-        display: flex;
-        align-items: center;
-        gap: var(--space-4);
-      }
-      .logo-mark svg { display: block; }
-      .company-info {}
-      .company-info h1 {
-        font-family: var(--font-sans);
-        font-size: var(--fs-h3);
-        font-weight: var(--fw-semibold);
-        color: var(--fg-1);
-        line-height: var(--lh-tight);
-        letter-spacing: -0.01em;
-      }
-      .company-info p {
-        font-size: var(--fs-xs);
-        color: var(--fg-3);
-        line-height: 1;
-        margin-top: 2px;
-      }
-
-      /* Eyebrow above page title */
-      .page-eyebrow {
-        background: var(--surface-muted);
-        border-bottom: 1px solid var(--border-1);
-        padding: var(--space-4) var(--space-8);
-      }
-      .page-eyebrow-label {
-        font-size: var(--fs-micro);
-        font-weight: var(--fw-bold);
-        text-transform: uppercase;
-        letter-spacing: var(--ls-eyebrow);
-        color: var(--clx-blue-600);
-        margin-bottom: var(--space-1);
-      }
-      .page-eyebrow-title {
-        font-size: var(--fs-h2);
-        font-weight: var(--fw-semibold);
-        color: var(--fg-1);
-        line-height: var(--lh-snug);
-      }
-      /* 3px brand rule accent below heading per DESIGN.md 8.8 */
-      .clx-rule-brand {
-        width: 48px;
-        height: 3px;
-        background: var(--clx-blue-500);
-        border: none;
-        margin-top: var(--space-2);
-      }
-
-      /* ═══════════════════════════════════════════════
-         Form Info Bar
-         ═══════════════════════════════════════════════ */
-      .form-info {
-        padding: var(--space-4) var(--space-8);
-        background: var(--surface-raised);
-        border-bottom: 1px solid var(--border-1);
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: var(--space-5);
-      }
-      .info-field { display: flex; flex-direction: column; gap: var(--space-1); }
-      .info-field label {
-        font-size: var(--fs-xs);
-        font-weight: var(--fw-semibold);
-        color: var(--fg-3);
-        text-transform: uppercase;
-        letter-spacing: var(--ls-label);
-      }
-      .info-field input {
-        font-family: var(--font-sans);
-        font-size: var(--fs-sm);
-        padding: 9px 12px;
-        border: 1px solid var(--border-2);
-        border-radius: var(--radius-sm);
-        background: var(--surface-raised);
-        color: var(--fg-1);
-        outline: none;
-        transition: border-color var(--dur-fast) var(--ease-standard),
-                    box-shadow var(--dur-fast) var(--ease-standard);
-      }
-      .info-field input::placeholder { color: var(--fg-4); }
-      .info-field input:focus {
-        border-color: var(--clx-blue-500);
-        box-shadow: 0 0 0 3px rgba(30, 159, 217, 0.18);
-      }
-
-      /* ═══════════════════════════════════════════════
-         Controls / Buttons (CXButton per DESIGN.md 8.1)
-         ═══════════════════════════════════════════════ */
-      .controls {
-        padding: var(--space-4) var(--space-8);
-        background: var(--surface-raised);
-        border-bottom: 1px solid var(--border-1);
-        display: flex;
-        gap: var(--space-3);
-        flex-wrap: wrap;
-        align-items: center;
-      }
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--space-2);
-        font-family: var(--font-sans);
-        font-size: var(--fs-sm);
-        font-weight: var(--fw-semibold);
-        padding: 9px 16px;
-        border: 1px solid transparent;
-        border-radius: var(--radius-md);
-        cursor: pointer;
-        transition: all var(--dur-fast) var(--ease-standard);
-        white-space: nowrap;
-        line-height: 1;
-      }
-      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-      .btn-primary {
-        background: var(--clx-blue-500);
-        color: var(--fg-on-blue);
-        border-color: var(--clx-blue-500);
-      }
-      .btn-primary:hover:not(:disabled) {
-        background: var(--clx-blue-600);
-        border-color: var(--clx-blue-600);
-      }
-      .btn-secondary {
-        background: var(--surface-raised);
-        color: var(--clx-blue-700);
-        border-color: var(--clx-blue-200);
-      }
-      .btn-secondary:hover:not(:disabled) {
-        border-color: var(--clx-blue-500);
-      }
-      .btn-ghost {
-        background: transparent;
-        color: var(--fg-2);
-        border-color: transparent;
-      }
-      .btn-ghost:hover:not(:disabled) {
-        background: var(--clx-gray-100);
-        color: var(--fg-1);
-      }
-      .btn-danger {
-        background: var(--surface-raised);
-        color: var(--clx-red-500);
-        border-color: #f1c6c6;
-      }
-      .btn-danger:hover:not(:disabled) {
-        background: var(--clx-red-500);
-        color: #ffffff;
-      }
-
-      /* Selected count badge */
-      .selected-count {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 20px;
-        height: 20px;
-        background: var(--clx-blue-500);
-        color: #ffffff;
-        font-size: 11px;
-        font-weight: var(--fw-bold);
-        border-radius: var(--radius-pill);
-        padding: 0 6px;
-      }
-
-      /* ═══════════════════════════════════════════════
-         Content area
-         ═══════════════════════════════════════════════ */
-      .content { padding: var(--space-6) var(--space-8) var(--space-8); }
-
-      /* ═══════════════════════════════════════════════
-         Category sections
-         ═══════════════════════════════════════════════ */
-      .category { margin-bottom: var(--space-6); }
-
-      /* Category header — dark surface (blue-900), no gradient */
-      .category-header {
-        background: var(--surface-inverse);
-        color: var(--fg-on-blue);
-        padding: var(--space-3) var(--space-4);
-        font-size: var(--fs-sm);
-        font-weight: var(--fw-bold);
-        letter-spacing: var(--ls-eyebrow);
-        text-transform: uppercase;
-        border-radius: var(--radius-md) var(--radius-md) 0 0;
-      }
-
-      /* ═══════════════════════════════════════════════
-         Items Table (per DESIGN.md 8.7 inputs, table styles)
-         ═══════════════════════════════════════════════ */
-      .items-table {
-        width: 100%;
-        border-collapse: collapse;
-        border: 1px solid var(--border-1);
-        border-top: none;
-        font-size: var(--fs-sm);
-      }
-      .items-table th {
-        background: var(--surface-muted);
-        padding: var(--space-3) var(--space-4);
-        text-align: left;
-        font-size: var(--fs-xs);
-        font-weight: var(--fw-semibold);
-        color: var(--fg-3);
-        text-transform: uppercase;
-        letter-spacing: var(--ls-label);
-        border-bottom: 1px solid var(--border-1);
-      }
-      .items-table td {
-        padding: var(--space-3) var(--space-4);
-        border-bottom: 1px solid var(--border-1);
-        color: var(--fg-2);
-        vertical-align: middle;
-      }
-      .items-table tr:hover td {
-        background: var(--clx-gray-50);
-      }
-      .items-table tr[data-item] {
-        border-left: 3px solid var(--clx-blue-500);
-      }
-
-      /* Checkbox styling */
-      .items-table input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-        accent-color: var(--clx-blue-500);
-      }
-
-      /* Number inputs per DESIGN.md 8.7 */
-      .items-table input[type="number"] {
-        font-family: var(--font-mono);
-        font-size: var(--fs-xs);
-        width: 60px;
-        padding: 5px 8px;
-        border: 1px solid var(--border-2);
-        border-radius: var(--radius-sm);
-        text-align: center;
-        color: var(--fg-1);
-        background: var(--surface-raised);
-        outline: none;
-        transition: border-color var(--dur-fast) var(--ease-standard),
-                    box-shadow var(--dur-fast) var(--ease-standard);
-      }
-      .items-table input[type="number"]:focus {
-        border-color: var(--clx-blue-500);
-        box-shadow: 0 0 0 3px rgba(30, 159, 217, 0.18);
-      }
-
-      /* Minimum column in mono */
-      .items-table td:nth-child(3) {
-        font-family: var(--font-mono);
-        font-weight: var(--fw-medium);
-        color: var(--fg-3);
-      }
-
-      /* Need column */
-      .need-qty {
-        font-family: var(--font-mono);
-        font-weight: var(--fw-semibold);
-        color: var(--fg-4);
-      }
-
-      /* Below-minimum highlight — amber callout style */
-      .below-minimum {
-        background: var(--clx-amber-bg) !important;
-        border-left-color: var(--clx-amber-500) !important;
-      }
-      .below-minimum .need-qty {
-        color: var(--clx-amber-fg);
-      }
-
-      /* Misc row text input */
-      .misc-desc {
-        font-family: var(--font-sans);
-        font-size: var(--fs-sm);
-        padding: 5px 8px;
-        border: 1px solid var(--border-2);
-        border-radius: var(--radius-sm);
-        width: 100%;
-        color: var(--fg-1);
-        background: var(--surface-raised);
-        outline: none;
-        transition: border-color var(--dur-fast) var(--ease-standard),
-                    box-shadow var(--dur-fast) var(--ease-standard);
-      }
-      .misc-desc::placeholder { color: var(--fg-4); }
-      .misc-desc:focus {
-        border-color: var(--clx-blue-500);
-        box-shadow: 0 0 0 3px rgba(30, 159, 217, 0.18);
-      }
-
-      /* ═══════════════════════════════════════════════
-         Pick List View (print output)
-         ═══════════════════════════════════════════════ */
-      .pick-list { display: none; }
-      .pick-list.active { display: block; }
-
-      .pick-list-header {
-        background: var(--surface-inverse);
-        color: var(--fg-on-blue);
-        padding: var(--space-6) var(--space-8);
-        display: flex;
-        align-items: center;
-        gap: var(--space-4);
-      }
-      .pick-list-header h1 {
-        font-size: var(--fs-h2);
-        font-weight: var(--fw-semibold);
-        line-height: var(--lh-tight);
-      }
-      .pick-list-header h2 {
-        font-size: var(--fs-sm);
-        font-weight: var(--fw-regular);
-        opacity: 0.8;
-        margin-top: 2px;
-      }
-
-      .pick-list-info {
-        padding: var(--space-4) var(--space-8);
-        background: var(--surface-muted);
-        border-bottom: 1px solid var(--border-1);
-        font-size: var(--fs-sm);
-        color: var(--fg-2);
-        display: flex;
-        gap: var(--space-6);
-        flex-wrap: wrap;
-      }
-      .pick-list-info strong {
-        font-weight: var(--fw-semibold);
-        color: var(--fg-3);
-        font-size: var(--fs-xs);
-        text-transform: uppercase;
-        letter-spacing: var(--ls-label);
-      }
-      .pick-list-info span {
-        font-family: var(--font-mono);
-        font-weight: var(--fw-medium);
-      }
-
-      .pick-list-items {
-        padding: var(--space-6) var(--space-8);
-        column-count: 2;
-        column-gap: var(--space-6);
-      }
-
-      /* Pick items use the classification left-border motif (DESIGN.md 8.5) */
-      .pick-item {
-        break-inside: avoid;
-        padding: var(--space-3) var(--space-4);
-        margin-bottom: var(--space-3);
-        background: var(--surface-raised);
-        border: 1px solid var(--border-1);
-        border-left: 3px solid var(--clx-blue-500);
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: var(--shadow-1);
-      }
-      .pick-item-name {
-        font-size: var(--fs-sm);
-        font-weight: var(--fw-semibold);
-        color: var(--fg-1);
-      }
-      .pick-item-qty {
-        font-family: var(--font-mono);
-        font-size: var(--fs-xs);
-        font-weight: var(--fw-bold);
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        padding: 3px 8px;
-        border-radius: var(--radius-sm);
-        background: var(--clx-blue-50);
-        color: var(--clx-blue-700);
-      }
-
-      /* ═══════════════════════════════════════════════
-         Footer
-         ═══════════════════════════════════════════════ */
-      .footer {
-        background: var(--surface-inverse);
-        color: var(--clx-gray-400);
-        padding: var(--space-4) var(--space-8);
-        text-align: center;
-        font-size: var(--fs-xs);
-      }
-
-      /* ═══════════════════════════════════════════════
-         Print styles
-         ═══════════════════════════════════════════════ */
-      @media print {
-        body { background: white; padding: 0; }
-        .container { box-shadow: none; border: none; }
-        .controls, .content, .no-print, .page-eyebrow, .footer { display: none !important; }
-        .pick-list { display: block !important; }
-        .pick-list-items { column-count: 3; }
-        .pick-item { box-shadow: none; }
-      }
-
-      /* ═══════════════════════════════════════════════
-         Responsive
-         ═══════════════════════════════════════════════ */
-      @media (max-width: 640px) {
-        body { padding: var(--space-3); }
-        .header, .form-info, .controls, .content, .page-eyebrow,
-        .pick-list-header, .pick-list-info, .pick-list-items { padding-left: var(--space-4); padding-right: var(--space-4); }
-        .pick-list-items { column-count: 1; }
-        .controls { flex-direction: column; align-items: stretch; }
-        .controls .btn { justify-content: center; }
-      }
-    </style>
+/* ── Print: the pick list sheet only ────────────────────────────────────── */
+@media print {
+  @page { margin: 0.6in; }
+  body { background: #fff; }
+  .site-header, .site-footer, .sheet-bar, #formView, #signinView { display: none !important; }
+  .sheet { margin: 0; padding: 0; border: 0; box-shadow: none; max-width: none; }
+  .sheet-meta { grid-template-columns: repeat(4, auto); }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Main Form View -->
-        <div id="mainView">
-            <!-- Header — white bar, logo mark + wordmark (DESIGN.md 8.10) -->
-            <div class="header">
-                <div class="logo-section">
-                    <div class="logo-mark">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 88" width="36" height="50" role="img" aria-label="CalOx mark">
-                            <g fill="#1e9fd9">
-                                <circle cx="22" cy="12" r="9"></circle>
-                                <circle cx="46" cy="12" r="9"></circle>
-                                <circle cx="10" cy="38" r="9"></circle>
-                                <circle cx="34" cy="38" r="9"></circle>
-                                <circle cx="58" cy="38" r="9"></circle>
-                                <circle cx="22" cy="64" r="9"></circle>
-                                <circle cx="46" cy="64" r="9"></circle>
-                            </g>
-                        </svg>
-                    </div>
-                    <div class="company-info">
-                        <h1>CalOx Health Services</h1>
-                        <p>Home Respiratory and DME Supply Management</p>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Page title with eyebrow -->
-            <div class="page-eyebrow">
-                <div class="page-eyebrow-label">Supply Management</div>
-                <div class="page-eyebrow-title">Truck Supply Pick List</div>
-                <hr class="clx-rule-brand">
-            </div>
+<header class="site-header">
+  <div class="wrap">
+    <div class="brand">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 112 86" role="img" aria-label="CalOx mark"><g fill="#1e9fd9"><circle cx="24" cy="11" r="11"/><circle cx="50" cy="11" r="11"/><circle cx="11" cy="37" r="11"/><circle cx="37" cy="37" r="11"/><circle cx="63" cy="37" r="11"/><circle cx="89" cy="37" r="11"/><circle cx="50" cy="63" r="11"/><circle cx="76" cy="63" r="11"/></g></svg>
+      <div>
+        <div class="brand-name">CalOx Health Services</div>
+        <div class="brand-sub">Home respiratory and DME supply</div>
+      </div>
+    </div>
+    <div class="account" id="account" hidden>
+      <div class="account-name"><strong id="accountName"></strong><span id="accountEmail"></span></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="signOutBtn">Sign out</button>
+    </div>
+  </div>
+</header>
 
-            <!-- Driver / Truck / Date -->
-            <div class="form-info">
-                <div class="info-field">
-                    <label>Driver/Route</label>
-                    <input type="text" id="driver" placeholder="Enter name">
-                </div>
-                <div class="info-field">
-                    <label>Truck #</label>
-                    <input type="text" id="truck" placeholder="Enter truck number">
-                </div>
-                <div class="info-field">
-                    <label>Date</label>
-                    <input type="date" id="date">
-                </div>
-            </div>
+<!-- ── Sign-in ─────────────────────────────────────────────────────────── -->
+<main class="signin" id="signinView">
+  <div class="signin-card">
+    <span class="clx-eyebrow">Supply management</span>
+    <h1>Truck supply pick list</h1>
+    <hr class="clx-rule-brand">
+    <p id="signinLead">Sign in with your CalOx Google account to continue.</p>
+    <div id="gsiButton"></div>
+    <div class="notice is-error" id="signinError" role="alert" hidden></div>
+    <div class="notice" id="setupNotice" hidden>
+      <strong>Google sign-in is not set up yet.</strong>
+      Add the OAuth client ID to <code class="mono">GOOGLE_CLIENT_ID</code> at the top of this page's script. Until then the form opens without sign-in so it can be reviewed.
+      <div style="margin-top: var(--space-3)"><button type="button" class="btn btn-secondary" id="previewBtn" style="margin-left:0">Open form for review</button></div>
+    </div>
+    <p class="clx-meta" id="signinHelp" style="margin-top: var(--space-5)">Trouble signing in? Contact the office.</p>
+  </div>
+</main>
 
-            <!-- Action buttons -->
-            <div class="controls no-print">
-                <button class="btn btn-primary" onclick="generatePickList()">
-                    Generate Pick List <span class="selected-count" id="selectedCount">0</span>
-                </button>
-                <button class="btn btn-secondary" onclick="checkBelowMinimum()">
-                    Auto-Select Below Minimum
-                </button>
-                <button class="btn btn-danger" onclick="clearAll()">
-                    Clear All
-                </button>
-            </div>
-
-            <div class="content">
-                <!-- NASAL CANNULAS -->
-                <div class="category">
-                    <div class="category-header">Nasal Cannulas</div>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px">Pick</th>
-                                <th>Item Description</th>
-                                <th style="width:80px">Minimum</th>
-                                <th style="width:80px">Current</th>
-                                <th style="width:80px">Need</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-item="7FT Cannula" data-min="25">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>7FT Cannula</td>
-                                <td>25</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="4FT Cannula" data-min="20">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>4FT Cannula</td>
-                                <td>20</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Pediatric Cannula" data-min="10">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Pediatric Cannula</td>
-                                <td>10</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="14FT Cannula" data-min="15">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>14FT Cannula</td>
-                                <td>15</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="4807 Dual Cannula" data-min="8">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>4807 Dual Cannula</td>
-                                <td>8</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="4804 Dual Cannula" data-min="8">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>4804 Dual Cannula</td>
-                                <td>8</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="1056 Soft Cannula" data-min="12">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>1056 Soft Cannula</td>
-                                <td>12</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Hi-Flo Cannula" data-min="8">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Hi-Flo Cannula</td>
-                                <td>8</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="VA Cannula" data-min="20">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>VA Cannula</td>
-                                <td>20</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- OXYGEN TUBING -->
-                <div class="category">
-                    <div class="category-header">Oxygen Tubing</div>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px">Pick</th>
-                                <th>Item Description</th>
-                                <th style="width:80px">Minimum</th>
-                                <th style="width:80px">Current</th>
-                                <th style="width:80px">Need</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-item="7FT Tubing" data-min="20">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>7FT Tubing</td>
-                                <td>20</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="25FT Tubing" data-min="30">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>25FT Tubing</td>
-                                <td>30</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="50FT Tubing" data-min="25">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>50FT Tubing</td>
-                                <td>25</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- ACCESSORIES & CONNECTORS -->
-                <div class="category">
-                    <div class="category-header">Accessories and Connectors</div>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px">Pick</th>
-                                <th>Item Description</th>
-                                <th style="width:80px">Minimum</th>
-                                <th style="width:80px">Current</th>
-                                <th style="width:80px">Need</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-item="1016 EZ Wrap" data-min="15">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>1016 EZ Wrap</td>
-                                <td>15</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="1205 Nipple" data-min="20">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>1205 Nipple</td>
-                                <td>20</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Christmas Tree Connectors" data-min="25">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Christmas Tree Connectors</td>
-                                <td>25</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Oxygen Connectors" data-min="20">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Oxygen Connectors</td>
-                                <td>20</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Water Trap" data-min="10">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Water Trap</td>
-                                <td>10</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Concentrator Filters" data-min="5">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Concentrator Filters</td>
-                                <td>5</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- CONCENTRATORS -->
-                <div class="category">
-                    <div class="category-header">Concentrators</div>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px">Pick</th>
-                                <th>Item Description</th>
-                                <th style="width:80px">Minimum</th>
-                                <th style="width:80px">Current</th>
-                                <th style="width:80px">Need</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-item="VALB 5Lpm Conc" data-min="1">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>VALB 5Lpm Conc</td>
-                                <td>1</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="VAGLA 5Lpm Conc" data-min="1">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>VAGLA 5Lpm Conc</td>
-                                <td>1</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="CalOx 5Lpm Conc" data-min="1">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>CalOx 5Lpm Conc</td>
-                                <td>1</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- HUMIDIFIERS -->
-                <div class="category">
-                    <div class="category-header">Humidifiers</div>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px">Pick</th>
-                                <th>Item Description</th>
-                                <th style="width:80px">Minimum</th>
-                                <th style="width:80px">Current</th>
-                                <th style="width:80px">Need</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-item="Bubble Humidifier (Standard)" data-min="12">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Bubble Humidifier (Standard)</td>
-                                <td>12</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Bubble Humidifier (High Flow)" data-min="8">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Bubble Humidifier (High Flow)</td>
-                                <td>8</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Pre-filled Humidifier" data-min="15">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Pre-filled Humidifier</td>
-                                <td>15</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- CYLINDER EQUIPMENT -->
-                <div class="category">
-                    <div class="category-header">Cylinder Equipment</div>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px">Pick</th>
-                                <th>Item Description</th>
-                                <th style="width:80px">Minimum</th>
-                                <th style="width:80px">Current</th>
-                                <th style="width:80px">Need</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-item="E-Cart Single" data-min="4">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>E-Cart Single</td>
-                                <td>4</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="E-Cart Dual" data-min="2">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>E-Cart Dual</td>
-                                <td>2</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="M6 Rack" data-min="3">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>M6 Rack</td>
-                                <td>3</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="E Keys" data-min="6">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>E Keys</td>
-                                <td>6</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Washers" data-min="50">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Washers</td>
-                                <td>50</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Firesafe" data-min="1">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Firesafe</td>
-                                <td>1</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- REGULATORS -->
-                <div class="category">
-                    <div class="category-header">Regulators</div>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px">Pick</th>
-                                <th>Item Description</th>
-                                <th style="width:80px">Minimum</th>
-                                <th style="width:80px">Current</th>
-                                <th style="width:80px">Need</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-item="E-Reg 0-8 LPM" data-min="6">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>E-Reg 0-8 LPM</td>
-                                <td>6</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="E-Reg 1-15 LPM" data-min="4">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>E-Reg 1-15 LPM</td>
-                                <td>4</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="E-Reg Low Flow" data-min="3">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>E-Reg Low Flow</td>
-                                <td>3</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="H-Reg 0-8 LPM" data-min="4">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>H-Reg 0-8 LPM</td>
-                                <td>4</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="H-Reg 0-15 LPM" data-min="3">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>H-Reg 0-15 LPM</td>
-                                <td>3</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="H-Reg Low Flow" data-min="2">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>H-Reg Low Flow</td>
-                                <td>2</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- INFECTION CONTROL & PPE -->
-                <div class="category">
-                    <div class="category-header">Infection Control and PPE</div>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px">Pick</th>
-                                <th>Item Description</th>
-                                <th style="width:80px">Minimum</th>
-                                <th style="width:80px">Current</th>
-                                <th style="width:80px">Need</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-item="Madacide (bottles)" data-min="3">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Madacide (bottles)</td>
-                                <td>3</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Latex Gloves (boxes)" data-min="2">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Latex Gloves (boxes)</td>
-                                <td>2</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="N95 Masks (boxes)" data-min="1">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>N95 Masks (boxes)</td>
-                                <td>1</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Gowns" data-min="10">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Gowns</td>
-                                <td>10</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                            <tr data-item="Hand Sanitizer (bottles)" data-min="3">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td>Hand Sanitizer (bottles)</td>
-                                <td>3</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- MISC / OTHER -->
-                <div class="category">
-                    <div class="category-header">Misc / Other</div>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px">Pick</th>
-                                <th>Item Description</th>
-                                <th style="width:80px">Minimum</th>
-                                <th style="width:80px">Current</th>
-                                <th style="width:80px">Need</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="misc-row" data-item="" data-min="0">
-                                <td><input type="checkbox" onchange="updateCount()"></td>
-                                <td><input type="text" class="misc-desc" placeholder="Describe item..." onchange="this.closest('tr').dataset.item = this.value"></td>
-                                <td>-</td>
-                                <td><input type="number" min="0" onchange="checkMinimum(this)"></td>
-                                <td class="need-qty">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pick List View (print) -->
-        <div class="pick-list" id="pickList">
-            <div class="pick-list-header">
-                <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 88" width="32" height="44" role="img" aria-label="CalOx">
-                        <g fill="#1e9fd9">
-                            <circle cx="22" cy="12" r="9"></circle>
-                            <circle cx="46" cy="12" r="9"></circle>
-                            <circle cx="10" cy="38" r="9"></circle>
-                            <circle cx="34" cy="38" r="9"></circle>
-                            <circle cx="58" cy="38" r="9"></circle>
-                            <circle cx="22" cy="64" r="9"></circle>
-                            <circle cx="46" cy="64" r="9"></circle>
-                        </g>
-                    </svg>
-                </div>
-                <div>
-                    <h1>CalOx Health Services</h1>
-                    <h2>Supply Pick List</h2>
-                </div>
-            </div>
-
-            <div class="pick-list-info">
-                <div><strong>Driver/Route:</strong> <span id="printDriver"></span></div>
-                <div><strong>Truck #:</strong> <span id="printTruck"></span></div>
-                <div><strong>Date:</strong> <span id="printDate"></span></div>
-            </div>
-
-            <div class="pick-list-items" id="pickListItems"></div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer no-print">
-            CalOx, Inc. — Delivering medical gases to Los Angeles-area businesses since 1936.
-        </div>
+<!-- ── Form ────────────────────────────────────────────────────────────── -->
+<main id="formView" hidden>
+  <div class="wrap">
+    <div class="page-head">
+      <span class="clx-eyebrow">Supply management</span>
+      <h1 class="page-title">Truck supply pick list</h1>
+      <hr class="clx-rule-brand">
+      <p>Count what is on the truck. Anything below its minimum goes on the pick list with the quantity needed to restock.</p>
     </div>
 
-    <script>
-        // Set today's date
-        document.getElementById('date').valueAsDate = new Date();
+    <div class="trip">
+      <div class="field"><label for="driver">Driver / route</label><input class="input" id="driver" type="text" autocomplete="name" placeholder="Name or route"></div>
+      <div class="field"><label for="truck">Truck #</label><input class="input" id="truck" type="text" inputmode="numeric" autocomplete="off" placeholder="Truck number"></div>
+      <div class="field"><label for="date">Date</label><input class="input" id="date" type="date"></div>
+    </div>
+  </div>
 
-        function checkMinimum(input) {
-            var row = input.closest('tr');
-            var min = parseInt(row.dataset.min) || 0;
-            var current = parseInt(input.value) || 0;
-            var need = Math.max(0, min - current);
+  <div class="toolbar">
+    <div class="wrap">
+      <div class="tally" aria-live="polite">
+        <span class="status status-selected" id="tallySelected">0 selected</span>
+        <span class="status status-pending" id="tallyBelow">0 below minimum</span>
+        <span class="status status-handled" id="tallyUncounted">0 not counted</span>
+      </div>
+      <div class="toolbar-actions">
+        <button type="button" class="btn btn-primary" id="generateBtn">Generate pick list <span class="count-pill" id="selectedCount">0</span></button>
+        <button type="button" class="btn btn-secondary" id="autoBtn">Select below minimum</button>
+        <button type="button" class="btn btn-danger" id="clearBtn">Clear all</button>
+      </div>
+    </div>
+  </div>
 
-            var needCell = row.querySelector('.need-qty');
-            needCell.textContent = need > 0 ? need : '-';
+  <div class="wrap">
+    <div class="notice" id="formNotice" role="status" hidden></div>
+    <div id="categories"></div>
 
-            if (need > 0) {
-                row.classList.add('below-minimum');
-            } else {
-                row.classList.remove('below-minimum');
-            }
-        }
+    <section class="category" aria-labelledby="miscHead">
+      <div class="category-head"><h2 id="miscHead">Misc / other</h2><span class="clx-meta">Anything not listed above</span></div>
+      <div class="table-card">
+        <table class="items">
+          <thead><tr><th class="c-pick">Pick</th><th>Item description</th><th class="c-num">Pick qty</th><th class="c-pick" aria-label="Remove"></th></tr></thead>
+          <tbody id="miscBody"></tbody>
+        </table>
+        <div class="misc-actions"><button type="button" class="btn btn-ghost btn-sm" id="addMiscBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add item</button></div>
+      </div>
+    </section>
+  </div>
+</main>
 
-        function updateCount() {
-            var checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
-            document.getElementById('selectedCount').textContent = checked;
-        }
+<!-- ── Pick list ───────────────────────────────────────────────────────── -->
+<main id="sheetView" hidden>
+  <div class="sheet-bar">
+    <div class="wrap">
+      <button type="button" class="btn btn-secondary" id="backBtn">Back to form</button>
+      <button type="button" class="btn btn-primary" id="printBtn">Print pick list</button>
+    </div>
+  </div>
+  <article class="sheet" id="sheet">
+    <div class="sheet-head">
+      <div class="brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 112 86" role="img" aria-label="CalOx mark"><g fill="#1e9fd9"><circle cx="24" cy="11" r="11"/><circle cx="50" cy="11" r="11"/><circle cx="11" cy="37" r="11"/><circle cx="37" cy="37" r="11"/><circle cx="63" cy="37" r="11"/><circle cx="89" cy="37" r="11"/><circle cx="50" cy="63" r="11"/><circle cx="76" cy="63" r="11"/></g></svg>
+        <div><div class="brand-name">CalOx Health Services</div><div class="clx-meta">Home respiratory and DME supply</div></div>
+      </div>
+      <div class="sheet-title">Supply pick list</div>
+    </div>
+    <dl class="sheet-meta">
+      <div><dt>Driver / route</dt><dd id="sheetDriver"></dd></div>
+      <div><dt>Truck #</dt><dd id="sheetTruck" class="mono"></dd></div>
+      <div><dt>Date</dt><dd id="sheetDate"></dd></div>
+      <div><dt>Prepared by</dt><dd id="sheetBy"></dd></div>
+    </dl>
+    <div id="sheetBody"></div>
+    <div class="sheet-foot">
+      <span id="sheetTotal"></span>
+      <span>Picked by<span class="sign-line">&nbsp;</span></span>
+    </div>
+  </article>
+</main>
 
-        function checkBelowMinimum() {
-            var rows = document.querySelectorAll('.items-table tbody tr');
-            rows.forEach(function(row) {
-                var currentInput = row.querySelector('input[type="number"]');
-                var checkbox = row.querySelector('input[type="checkbox"]');
-                var min = parseInt(row.dataset.min) || 0;
-                var current = parseInt(currentInput.value) || 0;
+<footer class="site-footer"><div class="wrap">CalOx, Inc. — Delivering medical gases to Los Angeles-area businesses since 1936.</div></footer>
 
-                if (min > 0 && current < min) {
-                    checkbox.checked = true;
-                } else {
-                    checkbox.checked = false;
-                }
-            });
-            updateCount();
-        }
+<script>
+(function () {
+  'use strict';
 
-        function clearAll() {
-            document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
-                cb.checked = false;
-            });
-            updateCount();
-        }
+  /* ========================================================================
+     SETUP — the only two lines to edit
+     1. Google Cloud Console → APIs & Services → Credentials → Create OAuth
+        client ID → Web application. Authorized JavaScript origin:
+        https://calox1.github.io   Paste the client ID below.
+     2. Google accounts allowed to sign in, by email domain.
+     ======================================================================== */
+  var GOOGLE_CLIENT_ID = '';                    // e.g. '1234567890-abc123.apps.googleusercontent.com'
+  var ALLOWED_DOMAINS  = ['caloxinc.com'];
+  var SESSION_HOURS    = 12;                    // stay signed in for one shift
 
-        function generatePickList() {
-            var driver = document.getElementById('driver').value || 'Not specified';
-            var truck = document.getElementById('truck').value || 'Not specified';
-            var date = document.getElementById('date').value || 'Not specified';
+  /* ========================================================================
+     Supply list — edit items and minimums here
+     ======================================================================== */
+  var CATEGORIES = [
+    { name: 'Nasal cannulas', items: [
+      ['7FT Cannula', 25], ['4FT Cannula', 20], ['Pediatric Cannula', 10], ['14FT Cannula', 15],
+      ['4807 Dual Cannula', 8], ['4804 Dual Cannula', 8], ['1056 Soft Cannula', 12],
+      ['Hi-Flo Cannula', 8], ['VA Cannula', 20] ] },
+    { name: 'Oxygen tubing', items: [
+      ['7FT Tubing', 20], ['25FT Tubing', 30], ['50FT Tubing', 25] ] },
+    { name: 'Accessories and connectors', items: [
+      ['1016 EZ Wrap', 15], ['1205 Nipple', 20], ['Christmas Tree Connectors', 25],
+      ['Oxygen Connectors', 20], ['Water Trap', 10], ['Concentrator Filters', 5] ] },
+    { name: 'Concentrators', items: [
+      ['VALB 5Lpm Conc', 1], ['VAGLA 5Lpm Conc', 1], ['CalOx 5Lpm Conc', 1] ] },
+    { name: 'Humidifiers', items: [
+      ['Bubble Humidifier (Standard)', 12], ['Bubble Humidifier (High Flow)', 8], ['Pre-filled Humidifier', 15] ] },
+    { name: 'Cylinder equipment', items: [
+      ['E-Cart Single', 4], ['E-Cart Dual', 2], ['M6 Rack', 3], ['E Keys', 6], ['Washers', 50], ['Firesafe', 1] ] },
+    { name: 'Regulators', items: [
+      ['E-Reg 0-8 LPM', 6], ['E-Reg 1-15 LPM', 4], ['E-Reg Low Flow', 3],
+      ['H-Reg 0-8 LPM', 4], ['H-Reg 0-15 LPM', 3], ['H-Reg Low Flow', 2] ] },
+    { name: 'Infection control and PPE', items: [
+      ['Madacide (bottles)', 3], ['Latex Gloves (boxes)', 2], ['N95 Masks (boxes)', 1],
+      ['Gowns', 10], ['Hand Sanitizer (bottles)', 3] ] }
+  ];
 
-            document.getElementById('printDriver').textContent = driver;
-            document.getElementById('printTruck').textContent = truck;
-            document.getElementById('printDate').textContent = date;
+  var SESSION_KEY = 'clx_supply_session_v1';
+  var DRAFT_KEY   = 'clx_supply_draft_v1';
+  var $ = function (id) { return document.getElementById(id); };
 
-            var pickListItems = document.getElementById('pickListItems');
-            pickListItems.innerHTML = '';
+  /* ── Storage (never fatal) ───────────────────────────────────────────── */
+  function load(key) { try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; } }
+  function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+  function drop(key) { try { localStorage.removeItem(key); } catch (e) {} }
 
-            var checkedRows = document.querySelectorAll('input[type="checkbox"]:checked');
+  /* ── Dates: always the device's local calendar day ───────────────────── */
+  function localISODate(d) {
+    d = d || new Date();
+    var p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  }
+  function longDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+    if (!m) return 'Not specified';
+    return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  }
 
-            if (checkedRows.length === 0) {
-                alert('Select at least one item to generate a pick list.');
-                return;
-            }
+  /* ========================================================================
+     Sign-in
+     ======================================================================== */
+  var user = null;
+  var configured = /\.apps\.googleusercontent\.com$/.test(GOOGLE_CLIENT_ID);
 
-            checkedRows.forEach(function(checkbox) {
-                var row = checkbox.closest('tr');
-                var item = row.dataset.item;
-                var min = parseInt(row.dataset.min) || 0;
-                var current = parseInt(row.querySelector('input[type="number"]').value) || 0;
-                var need = Math.max(0, min - current);
+  function decodeJwt(token) {
+    var part = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    while (part.length % 4) part += '=';
+    var bin = atob(part), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
 
-                var pickItem = document.createElement('div');
-                pickItem.className = 'pick-item';
-                pickItem.innerHTML =
-                    '<span class="pick-item-name">' + (item || 'Custom item') + '</span>' +
-                    '<span class="pick-item-qty">QTY: ' + need + '</span>';
-                pickListItems.appendChild(pickItem);
-            });
+  function signinError(msg) { var el = $('signinError'); el.textContent = msg; el.hidden = !msg; }
 
-            document.getElementById('mainView').style.display = 'none';
-            document.getElementById('pickList').classList.add('active');
+  function onCredential(response) {
+    var claims;
+    try { claims = decodeJwt(response.credential); } catch (e) { return signinError('Sign-in did not complete. Try again.'); }
+    var email = String(claims.email || '').toLowerCase();
+    var domain = email.split('@')[1] || '';
+    if (claims.aud !== GOOGLE_CLIENT_ID || !claims.email_verified || claims.exp * 1000 < Date.now()) {
+      return signinError('Sign-in did not complete. Try again.');
+    }
+    if (ALLOWED_DOMAINS.indexOf(domain) === -1) {
+      try { google.accounts.id.disableAutoSelect(); } catch (e) {}
+      return signinError(email + ' is not a CalOx account. Sign in with your @' + ALLOWED_DOMAINS[0] + ' Google account.');
+    }
+    user = { name: claims.name || email, email: email, exp: Date.now() + SESSION_HOURS * 3600 * 1000 };
+    save(SESSION_KEY, user);
+    signinError('');
+    showApp();
+  }
 
-            setTimeout(function() { window.print(); }, 100);
+  var gsiTries = 0;
+  function initGoogle() {
+    if (!(window.google && google.accounts && google.accounts.id)) {
+      if (++gsiTries > 50) return signinError('Google sign-in could not load. Check your connection and reload the page.');
+      return setTimeout(initGoogle, 200);
+    }
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID, callback: onCredential,
+      auto_select: true, hd: ALLOWED_DOMAINS.length === 1 ? ALLOWED_DOMAINS[0] : undefined
+    });
+    google.accounts.id.renderButton($('gsiButton'), {
+      theme: 'outline', size: 'large', shape: 'rectangular', text: 'signin_with', logo_alignment: 'left',
+      width: Math.min(320, $('gsiButton').clientWidth || 320)
+    });
+  }
 
-            setTimeout(function() {
-                document.getElementById('mainView').style.display = 'block';
-                document.getElementById('pickList').classList.remove('active');
-            }, 500);
-        }
-    </script>
+  function showSignin() {
+    user = null;
+    $('formView').hidden = true; $('sheetView').hidden = true; $('account').hidden = true;
+    $('signinView').hidden = false;
+    if (configured) { initGoogle(); }
+    else { $('setupNotice').hidden = false; $('signinLead').hidden = true; $('signinHelp').hidden = true; }
+  }
+
+  function showApp() {
+    $('signinView').hidden = true; $('sheetView').hidden = true; $('formView').hidden = false;
+    if (user) {
+      $('accountName').textContent = user.name; $('accountEmail').textContent = user.email;
+      $('account').hidden = false;
+      if (!$('driver').value) { $('driver').value = user.name; persist(); }
+    }
+    window.scrollTo(0, 0);
+  }
+
+  $('signOutBtn').addEventListener('click', function () {
+    drop(SESSION_KEY);
+    try { google.accounts.id.disableAutoSelect(); } catch (e) {}
+    showSignin();
+  });
+  $('previewBtn').addEventListener('click', function () { if (!configured) showApp(); });
+
+  /* ========================================================================
+     Form state
+     ======================================================================== */
+  var rows = [];      // stock rows: { id, cat, name, min, count, qty, manual, picked, tr }
+  var misc = [];      // custom rows: { id, name, qty, picked, tr }
+  var miscSeq = 0;
+
+  function toInt(v) {
+    if (v === '' || v == null) return '';
+    var n = Math.floor(Number(v));
+    return isFinite(n) && n >= 0 ? n : '';
+  }
+  function need(r) { return r.count === '' ? null : Math.max(0, r.min - r.count); }
+  /* Quantity that prints: a typed override wins; otherwise minimum minus the
+     count; a picked item with no count restocks to the full minimum. */
+  function pickQty(r) {
+    if (r.manual) return r.qty;
+    var n = need(r);
+    if (n === null) return r.picked ? r.min : '';
+    return n;
+  }
+
+  function el(tag, attrs, kids) {
+    var node = document.createElement(tag);
+    for (var k in attrs || {}) {
+      if (k === 'text') node.textContent = attrs[k]; else node.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { node.appendChild(c); });
+    return node;
+  }
+  function numInput(cls, label) {
+    return el('input', { type: 'number', min: '0', step: '1', inputmode: 'numeric', pattern: '[0-9]*', class: 'input input-num ' + cls, 'aria-label': label, autocomplete: 'off' });
+  }
+
+  function buildCategories() {
+    var host = $('categories');
+    CATEGORIES.forEach(function (cat, ci) {
+      var tbody = el('tbody');
+      cat.items.forEach(function (it, ii) {
+        var id = 'i' + ci + '_' + ii;
+        var r = { id: id, cat: cat.name, name: it[0], min: it[1], count: '', qty: '', manual: false, picked: false };
+        var cb = el('input', { type: 'checkbox', id: id, class: 'q-pick', 'aria-label': 'Pick ' + r.name });
+        var count = numInput('q-count', r.name + ' on truck');
+        var qty = numInput('q-qty', r.name + ' pick quantity');
+        r.tr = el('tr', { 'data-id': id }, [
+          el('td', { class: 'c-pick' }, [cb]),
+          el('td', { class: 'c-item' }, [el('label', { for: id }, [document.createTextNode(r.name), el('span', { class: 'min-inline mono', text: 'Min ' + r.min })])]),
+          el('td', { class: 'c-min mono', text: String(r.min) }),
+          el('td', { class: 'c-num' }, [count]),
+          el('td', { class: 'c-num' }, [qty])
+        ]);
+        tbody.appendChild(r.tr);
+        rows.push(r);
+      });
+      var head = el('tr', {}, [
+        el('th', { class: 'c-pick', text: 'Pick' }), el('th', { text: 'Item description' }),
+        el('th', { class: 'c-min', text: 'Minimum' }), el('th', { class: 'c-num', text: 'On truck' }), el('th', { class: 'c-num', text: 'Pick qty' })
+      ]);
+      host.appendChild(el('section', { class: 'category' }, [
+        el('div', { class: 'category-head' }, [el('h2', { text: cat.name }), el('span', { class: 'clx-meta', 'data-cat': cat.name })]),
+        el('div', { class: 'table-card' }, [el('table', { class: 'items' }, [el('thead', {}, [head]), tbody])])
+      ]));
+    });
+  }
+
+  function paintRow(r, skip) {
+    var n = need(r), q = pickQty(r);
+    r.tr.classList.toggle('is-below', n !== null && n > 0);
+    r.tr.classList.toggle('is-picked', r.picked);
+    r.tr.querySelector('.q-pick').checked = r.picked;
+    if (skip !== 'count') r.tr.querySelector('.q-count').value = r.count;
+    if (skip !== 'qty') r.tr.querySelector('.q-qty').value = q;
+  }
+
+  function addMisc(data) {
+    data = data || {};
+    var m = { id: 'm' + (++miscSeq), name: data.name || '', qty: toInt(data.qty), picked: !!data.picked };
+    var cb = el('input', { type: 'checkbox', class: 'q-pick', 'aria-label': 'Pick custom item' });
+    var desc = el('input', { type: 'text', class: 'input q-desc', placeholder: 'Describe item', 'aria-label': 'Custom item description', maxlength: '80' });
+    var qty = numInput('q-qty', 'Custom item pick quantity');
+    var rm = el('button', { type: 'button', class: 'btn btn-ghost btn-icon q-remove', 'aria-label': 'Remove item' });
+    rm.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    cb.checked = m.picked; desc.value = m.name; qty.value = m.qty;
+    m.tr = el('tr', { 'data-id': m.id }, [el('td', { class: 'c-pick' }, [cb]), el('td', {}, [desc]), el('td', { class: 'c-num' }, [qty]), el('td', { class: 'c-pick' }, [rm])]);
+    $('miscBody').appendChild(m.tr);
+    misc.push(m);
+    return m;
+  }
+
+  function find(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
+
+  function refresh() {
+    var selected = 0, below = 0, uncounted = 0, perCat = {};
+    rows.forEach(function (r) {
+      var n = need(r);
+      if (r.picked) selected++;
+      if (n === null) uncounted++; else if (n > 0) { below++; perCat[r.cat] = (perCat[r.cat] || 0) + 1; }
+    });
+    misc.forEach(function (m) { if (m.picked) selected++; m.tr.classList.toggle('is-picked', m.picked); });
+    $('selectedCount').textContent = selected;
+    $('tallySelected').textContent = selected + ' selected';
+    $('tallyBelow').textContent = below + ' below minimum';
+    $('tallyUncounted').textContent = uncounted + ' not counted';
+    document.querySelectorAll('[data-cat]').forEach(function (s) {
+      var c = perCat[s.getAttribute('data-cat')] || 0;
+      s.textContent = c ? c + ' below minimum' : '';
+    });
+    persist();
+  }
+
+  function persist() {
+    var d = { day: localISODate(), driver: $('driver').value, truck: $('truck').value, date: $('date').value, rows: {}, misc: [] };
+    rows.forEach(function (r) {
+      if (r.count !== '' || r.picked || r.manual) d.rows[r.name] = { count: r.count, qty: r.qty, manual: r.manual, picked: r.picked };
+    });
+    misc.forEach(function (m) { if (m.name || m.qty !== '' || m.picked) d.misc.push({ name: m.name, qty: m.qty, picked: m.picked }); });
+    save(DRAFT_KEY, d);
+  }
+
+  /* A draft only survives the day it was started — a reload mid-count keeps
+     the numbers, but yesterday's counts never carry over. */
+  function restore() {
+    var d = load(DRAFT_KEY);
+    $('date').value = localISODate();
+    if (!d || d.day !== localISODate()) { drop(DRAFT_KEY); return; }
+    $('driver').value = d.driver || ''; $('truck').value = d.truck || '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d.date || '')) $('date').value = d.date;
+    rows.forEach(function (r) {
+      var s = d.rows && d.rows[r.name];
+      if (!s) return;
+      r.count = toInt(s.count); r.qty = toInt(s.qty); r.manual = !!s.manual && r.qty !== ''; r.picked = !!s.picked;
+    });
+    (d.misc || []).forEach(addMisc);
+  }
+
+  function notice(msg, tone, action) {
+    var n = $('formNotice');
+    n.className = 'notice' + (tone ? ' is-' + tone : '');
+    n.textContent = msg || '';
+    if (action) {
+      var b = el('button', { type: 'button', class: 'btn btn-secondary btn-sm', text: action.label });
+      b.addEventListener('click', action.run);
+      n.appendChild(b);
+    }
+    n.hidden = !msg;
+  }
+  function clearInvalid() { document.querySelectorAll('tr.is-invalid').forEach(function (t) { t.classList.remove('is-invalid'); }); }
+
+  /* ── Events ──────────────────────────────────────────────────────────── */
+  $('categories').addEventListener('input', function (e) {
+    var tr = e.target.closest('tr[data-id]'); if (!tr) return;
+    var r = find(rows, tr.getAttribute('data-id')); if (!r) return;
+    tr.classList.remove('is-invalid');
+    if (e.target.classList.contains('q-count')) {
+      r.count = toInt(e.target.value); paintRow(r, 'count');
+    } else if (e.target.classList.contains('q-qty')) {
+      r.qty = toInt(e.target.value); r.manual = r.qty !== '';
+      if (r.manual && r.qty > 0) r.picked = true;
+      paintRow(r, 'qty');
+    } else if (e.target.classList.contains('q-pick')) {
+      r.picked = e.target.checked; paintRow(r);
+    }
+    refresh();
+  });
+  /* Tidy what was typed (e.g. "-3" or "2.5") once the field loses focus. */
+  $('categories').addEventListener('change', function (e) {
+    var tr = e.target.closest('tr[data-id]'); if (!tr) return;
+    var r = find(rows, tr.getAttribute('data-id')); if (r) paintRow(r);
+  });
+
+  $('miscBody').addEventListener('input', function (e) {
+    var tr = e.target.closest('tr[data-id]'); if (!tr) return;
+    var m = find(misc, tr.getAttribute('data-id')); if (!m) return;
+    tr.classList.remove('is-invalid');
+    if (e.target.classList.contains('q-desc')) { m.name = e.target.value.trim(); if (m.name) m.picked = true; }
+    else if (e.target.classList.contains('q-qty')) { m.qty = toInt(e.target.value); if (m.qty > 0) m.picked = true; }
+    else if (e.target.classList.contains('q-pick')) { m.picked = e.target.checked; }
+    tr.querySelector('.q-pick').checked = m.picked;
+    refresh();
+  });
+  $('miscBody').addEventListener('click', function (e) {
+    var btn = e.target.closest('.q-remove'); if (!btn) return;
+    var tr = btn.closest('tr'), id = tr.getAttribute('data-id');
+    misc = misc.filter(function (m) { return m.id !== id; });
+    tr.remove();
+    if (!misc.length) addMisc();
+    refresh();
+  });
+  $('addMiscBtn').addEventListener('click', function () { addMisc().tr.querySelector('.q-desc').focus(); });
+
+  ['driver', 'truck', 'date'].forEach(function (id) { $(id).addEventListener('input', persist); });
+
+  function selectBelow() {
+    var added = 0, uncounted = 0;
+    rows.forEach(function (r) {
+      var n = need(r);
+      if (n === null) { uncounted++; return; }
+      if (n > 0 && !r.picked) { r.picked = true; added++; }
+      if (n === 0 && r.picked && !r.manual) r.picked = false;   // recounted and now stocked
+      paintRow(r);
+    });
+    refresh();
+    return { added: added, uncounted: uncounted };
+  }
+
+  $('autoBtn').addEventListener('click', function () {
+    clearInvalid();
+    var res = selectBelow();
+    if (res.uncounted === rows.length) return notice('Nothing has been counted yet. Enter what is on the truck, then select below minimum.', 'error');
+    var below = rows.filter(function (r) { return need(r) > 0; }).length;
+    var msg = below ? below + (below === 1 ? ' item is' : ' items are') + ' below minimum and selected.' : 'Every counted item is at or above minimum.';
+    if (res.uncounted) msg += ' ' + res.uncounted + (res.uncounted === 1 ? ' item has' : ' items have') + ' no count and ' + (res.uncounted === 1 ? 'was' : 'were') + ' left as is.';
+    notice(msg, 'ok');
+  });
+
+  $('clearBtn').addEventListener('click', function () {
+    if (!window.confirm('Clear all counts, quantities and selections?')) return;
+    rows.forEach(function (r) { r.count = ''; r.qty = ''; r.manual = false; r.picked = false; r.tr.classList.remove('is-invalid'); paintRow(r); });
+    misc = []; $('miscBody').textContent = ''; addMisc();
+    notice(''); refresh();
+  });
+
+  /* ── Pick list ───────────────────────────────────────────────────────── */
+  function generate(skipBelowCheck) {
+    clearInvalid(); notice('');
+    var picks = [], bad = [];
+    rows.forEach(function (r) {
+      if (!r.picked) return;
+      var q = pickQty(r);
+      if (q === '' || q <= 0) bad.push(r.tr); else picks.push({ cat: r.cat, name: r.name, qty: q });
+    });
+    misc.forEach(function (m) {
+      if (!m.picked) return;
+      var okName = !!m.name, okQty = m.qty !== '' && m.qty > 0;
+      m.tr.querySelector('.q-desc').classList.toggle('need', !okName);
+      if (!okName || !okQty) bad.push(m.tr); else picks.push({ cat: 'Misc / other', name: m.name, qty: m.qty });
+    });
+
+    if (bad.length) {
+      bad.forEach(function (t) { t.classList.add('is-invalid'); });
+      notice(bad.length + (bad.length === 1 ? ' selected item needs' : ' selected items need') + ' a pick quantity above zero (custom items also need a description). Fix or untick to continue.', 'error');
+      bad[0].scrollIntoView({ block: 'center' });
+      var f = bad[0].querySelector('.q-desc.need') || bad[0].querySelector('.q-qty'); if (f) f.focus({ preventScroll: true });
+      return;
+    }
+    if (!picks.length) return notice('Select at least one item to generate a pick list.', 'error');
+
+    var missed = rows.filter(function (r) { return need(r) > 0 && !r.picked; });
+    if (missed.length && !skipBelowCheck) {
+      if (window.confirm(missed.length + (missed.length === 1 ? ' item is' : ' items are') + ' below minimum but not selected.\n\nOK — add to the pick list\nCancel — leave off')) {
+        missed.forEach(function (r) { r.picked = true; paintRow(r); });
+        refresh();
+        return generate(true);
+      }
+    }
+
+    $('sheetDriver').textContent = $('driver').value.trim() || 'Not specified';
+    $('sheetTruck').textContent = $('truck').value.trim() || 'Not specified';
+    $('sheetDate').textContent = longDate($('date').value);
+    $('sheetBy').textContent = user ? user.name : 'Not signed in';
+
+    var body = $('sheetBody'); body.textContent = '';
+    var order = CATEGORIES.map(function (c) { return c.name; }).concat(['Misc / other']), units = 0;
+    order.forEach(function (cat) {
+      var list = picks.filter(function (p) { return p.cat === cat; });
+      if (!list.length) return;
+      var tb = el('tbody');
+      list.forEach(function (p) {
+        units += p.qty;
+        tb.appendChild(el('tr', {}, [
+          el('td', { class: 'p-box' }, [el('span')]),
+          el('td', { text: p.name }),
+          el('td', { class: 'p-qty mono', text: 'Qty ' + p.qty })
+        ]));
+      });
+      body.appendChild(el('h3', { text: cat }));
+      body.appendChild(el('table', { class: 'picks' }, [tb]));
+    });
+    $('sheetTotal').textContent = picks.length + (picks.length === 1 ? ' item' : ' items') + ' — ' + units + ' units total';
+
+    $('formView').hidden = true; $('sheetView').hidden = false;
+    window.scrollTo(0, 0);
+  }
+
+  $('generateBtn').addEventListener('click', function () { generate(false); });
+  $('backBtn').addEventListener('click', function () { $('sheetView').hidden = true; $('formView').hidden = false; window.scrollTo(0, 0); });
+  $('printBtn').addEventListener('click', function () { window.print(); });
+
+  /* Name the printed/saved PDF: CalOx-pick-list_2026-10-07_truck-12 */
+  var baseTitle = document.title;
+  window.addEventListener('beforeprint', function () {
+    var t = $('truck').value.trim().replace(/[^\w-]+/g, '-');
+    document.title = 'CalOx-pick-list_' + ($('date').value || localISODate()) + (t ? '_truck-' + t : '');
+  });
+  window.addEventListener('afterprint', function () { document.title = baseTitle; });
+
+  /* ── Start ───────────────────────────────────────────────────────────── */
+  buildCategories();
+  restore();
+  if (!misc.length) addMisc();
+  rows.forEach(function (r) { paintRow(r); });
+  refresh();
+
+  var session = load(SESSION_KEY);
+  var domainOk = session && ALLOWED_DOMAINS.indexOf(String(session.email || '').split('@')[1]) !== -1;
+  if (configured && session && session.exp > Date.now() && domainOk) { user = session; showApp(); }
+  else { drop(SESSION_KEY); showSignin(); }
+})();
+</script>
 </body>
 </html>
