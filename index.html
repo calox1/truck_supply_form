@@ -308,7 +308,7 @@ table.picks { width: 100%; border-collapse: collapse; }
     <div class="wrap">
       <button type="button" class="btn btn-secondary" id="backBtn">Back to form</button>
       <div class="toolbar-actions" style="width:auto">
-        <button type="button" class="btn btn-secondary" id="shareBtn" hidden>Share list</button>
+        <button type="button" class="btn btn-secondary" id="shareBtn" hidden>Share PDF</button>
         <button type="button" class="btn btn-primary" id="printBtn">Print pick list</button>
       </div>
     </div>
@@ -774,7 +774,7 @@ table.picks { width: 100%; border-collapse: collapse; }
     try { started = document.execCommand('print', false, null); } catch (e) {}
     if (!started) { try { window.print(); } catch (e) {} }
     setTimeout(function () {
-      if (!printSeen) sheetNotice('If the print dialog did not open: tap the Share button in your browser, then Print. Or use Share list to send it by text or email.');
+      if (!printSeen) sheetNotice('If the print dialog did not open, tap Share PDF, then choose Print, or send it by text or email.');
     }, 1500);
   });
 
@@ -794,18 +794,89 @@ table.picks { width: 100%; border-collapse: collapse; }
     lines.push('', $('sheetTotal').textContent);
     return lines.join('\n');
   }
+  /* A small, dependency-free PDF of the pick list. iPhone Safari does not
+     reliably open a print dialog from a web page, but a PDF handed to the
+     share sheet can be printed, texted or emailed. */
+  function pdfSafe(t) {
+    return String(t).replace(/[‒-―]/g, '-').replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
+      .replace(/[^\x20-\x7E\xA0-\xFF]/g, '?').replace(/([\\()])/g, '\\$1');
+  }
+  function buildPdf() {
+    var W = 612, H = 792, M = 54, pages = [], ops, y;
+    function text(str, x, yy, size, bold) { ops.push('BT /' + (bold ? 'F2' : 'F1') + ' ' + size + ' Tf ' + x + ' ' + yy + ' Td (' + pdfSafe(str) + ') Tj ET'); }
+    function rule(yy) { ops.push('0.87 G 0.5 w ' + M + ' ' + yy + ' m ' + (W - M) + ' ' + yy + ' l S 0 G'); }
+    function newPage() { ops = []; pages.push(ops); y = H - M; }
+    function need(h) { if (y - h < M + 40) newPage(); }
+    newPage();
+    text('CalOx Health Services', M, y - 12, 16, true);
+    text('Supply pick list', W - M - 110, y - 12, 14, true);
+    y -= 28; rule(y); y -= 18;
+    [['Driver / route', $('sheetDriver').textContent], ['Truck #', $('sheetTruck').textContent],
+     ['Date', $('sheetDate').textContent], ['Prepared by', $('sheetBy').textContent]].forEach(function (m) {
+      text(m[0] + ':', M, y, 10, true); text(m[1], M + 90, y, 10, false); y -= 15;
+    });
+    y -= 4;
+    Array.prototype.forEach.call($('sheetBody').children, function (node) {
+      if (node.tagName === 'H3') {
+        need(66); y -= 22;
+        ops.push('0.06 0.42 0.58 rg'); text(node.textContent.toUpperCase(), M, y, 9, true); ops.push('0 g');
+        y -= 8; rule(y); return;
+      }
+      node.querySelectorAll('tr').forEach(function (tr) {
+        var td = tr.querySelectorAll('td');
+        need(22); y -= 16;
+        ops.push('0.35 G 1 w ' + M + ' ' + (y - 2) + ' 10 10 re S 0 G');
+        text(td[1].textContent, M + 20, y, 11, false);
+        text(td[2].textContent, W - M - 60, y, 11, true);
+        y -= 6; rule(y);
+      });
+    });
+    need(50); y -= 34;
+    text($('sheetTotal').textContent, M, y, 10, false);
+    text('Picked by', W - M - 230, y, 10, false);
+    ops.push('0.35 G 0.75 w ' + (W - M - 180) + ' ' + (y - 2) + ' m ' + (W - M) + ' ' + (y - 2) + ' l S 0 G');
+
+    var objs = [], n = pages.length, kids = [];
+    objs[1] = '<< /Type /Catalog /Pages 2 0 R >>';
+    objs[3] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>';
+    objs[4] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>';
+    pages.forEach(function (p, i) {
+      var pid = 5 + i * 2, cid = pid + 1, stream = p.join('\n');
+      kids.push(pid + ' 0 R');
+      objs[pid] = '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + W + ' ' + H + '] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ' + cid + ' 0 R >>';
+      objs[cid] = '<< /Length ' + stream.length + ' >>\nstream\n' + stream + '\nendstream';
+    });
+    objs[2] = '<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + n + ' >>';
+    var out = '%PDF-1.4\n', offs = [], i;
+    for (i = 1; i < objs.length; i++) { offs[i] = out.length; out += i + ' 0 obj\n' + objs[i] + '\nendobj\n'; }
+    var xref = out.length;
+    out += 'xref\n0 ' + objs.length + '\n0000000000 65535 f \n';
+    for (i = 1; i < objs.length; i++) out += ('0000000000' + offs[i]).slice(-10) + ' 00000 n \n';
+    out += 'trailer\n<< /Size ' + objs.length + ' /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF';
+    var bytes = new Uint8Array(out.length);
+    for (i = 0; i < out.length; i++) bytes[i] = out.charCodeAt(i) & 255;
+    return bytes;
+  }
+  function fileStem() {
+    var t = $('truck').value.trim().replace(/[^\w-]+/g, '-');
+    return 'CalOx-pick-list_' + ($('date').value || localISODate()) + (t ? '_truck-' + t : '');
+  }
   if (navigator.share) {
     $('shareBtn').hidden = false;
     $('shareBtn').addEventListener('click', function () {
-      navigator.share({ title: 'CalOx supply pick list', text: sheetText() }).catch(function () {});
+      var payload = { title: 'CalOx supply pick list', text: sheetText() };
+      try {
+        var file = new File([buildPdf()], fileStem() + '.pdf', { type: 'application/pdf' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) payload = { files: [file], title: 'CalOx supply pick list' };
+      } catch (e) {}
+      navigator.share(payload).catch(function () {});
     });
   }
 
   /* Name the printed/saved PDF: CalOx-pick-list_2026-10-07_truck-12 */
   var baseTitle = document.title;
   window.addEventListener('beforeprint', function () {
-    var t = $('truck').value.trim().replace(/[^\w-]+/g, '-');
-    document.title = 'CalOx-pick-list_' + ($('date').value || localISODate()) + (t ? '_truck-' + t : '');
+    document.title = fileStem();
   });
   window.addEventListener('afterprint', function () { document.title = baseTitle; });
 
