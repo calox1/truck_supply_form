@@ -307,8 +307,12 @@ table.picks { width: 100%; border-collapse: collapse; }
   <div class="sheet-bar">
     <div class="wrap">
       <button type="button" class="btn btn-secondary" id="backBtn">Back to form</button>
-      <button type="button" class="btn btn-primary" id="printBtn">Print pick list</button>
+      <div class="toolbar-actions" style="width:auto">
+        <button type="button" class="btn btn-secondary" id="shareBtn" hidden>Share list</button>
+        <button type="button" class="btn btn-primary" id="printBtn">Print pick list</button>
+      </div>
     </div>
+    <div class="wrap"><div class="notice" id="sheetNotice" role="status" style="margin:0 0 12px" hidden></div></div>
   </div>
   <article class="sheet" id="sheet">
     <div class="sheet-head">
@@ -758,7 +762,44 @@ table.picks { width: 100%; border-collapse: collapse; }
 
   $('generateBtn').addEventListener('click', function () { generate(false); });
   $('backBtn').addEventListener('click', function () { $('sheetView').hidden = true; $('formView').hidden = false; window.scrollTo(0, 0); });
-  $('printBtn').addEventListener('click', function () { window.print(); });
+  /* Printing. iPhone Safari can silently ignore window.print(), so try the
+     execCommand route first, and if no print dialog shows up, point the
+     driver at Share instead of leaving them stuck. */
+  var printSeen = false;
+  window.addEventListener('beforeprint', function () { printSeen = true; });
+  function sheetNotice(msg) { var n = $('sheetNotice'); n.textContent = msg || ''; n.hidden = !msg; }
+  $('printBtn').addEventListener('click', function () {
+    printSeen = false; sheetNotice('');
+    var started = false;
+    try { started = document.execCommand('print', false, null); } catch (e) {}
+    if (!started) { try { window.print(); } catch (e) {} }
+    setTimeout(function () {
+      if (!printSeen) sheetNotice('If the print dialog did not open: tap the Share button in your browser, then Print. Or use Share list to send it by text or email.');
+    }, 1500);
+  });
+
+  function sheetText() {
+    var lines = ['CalOx supply pick list',
+      'Driver / route: ' + $('sheetDriver').textContent,
+      'Truck #: ' + $('sheetTruck').textContent,
+      'Date: ' + $('sheetDate').textContent,
+      'Prepared by: ' + $('sheetBy').textContent];
+    Array.prototype.forEach.call($('sheetBody').children, function (node) {
+      if (node.tagName === 'H3') { lines.push('', node.textContent.toUpperCase()); return; }
+      node.querySelectorAll('tr').forEach(function (tr) {
+        var td = tr.querySelectorAll('td');
+        lines.push('[ ] ' + td[1].textContent + ' - ' + td[2].textContent);
+      });
+    });
+    lines.push('', $('sheetTotal').textContent);
+    return lines.join('\n');
+  }
+  if (navigator.share) {
+    $('shareBtn').hidden = false;
+    $('shareBtn').addEventListener('click', function () {
+      navigator.share({ title: 'CalOx supply pick list', text: sheetText() }).catch(function () {});
+    });
+  }
 
   /* Name the printed/saved PDF: CalOx-pick-list_2026-10-07_truck-12 */
   var baseTitle = document.title;
